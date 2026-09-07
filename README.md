@@ -36,4 +36,4 @@ The repository is organized as a reviewer-facing evidence package for the manusc
 
 ## Scholarly Use
 
-Use the manuscript title together with the GitHub repository URL and release tag when citing these materials. The folder structure and content index provide stable paths for manuscript, review, and archival references.
+Use the manuscript title together with the repository URL when referring to these materials. The folder structure and content index provide stable paths for manuscript and review references.
