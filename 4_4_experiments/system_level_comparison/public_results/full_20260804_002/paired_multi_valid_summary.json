@@ -1,0 +1,63 @@
+{
+  "basis": "Tasks where multi_agent_current has both final logical and final physical outputs",
+  "task_ids": [
+    "rflp_002",
+    "rflp_005",
+    "rflp_007",
+    "rflp_008",
+    "rflp_009",
+    "rflp_010",
+    "rflp_013",
+    "rflp_015",
+    "rflp_016",
+    "rflp_017",
+    "rflp_018",
+    "rflp_022",
+    "rflp_023"
+  ],
+  "n_tasks": 13,
+  "groups": {
+    "multi_agent_current": {
+      "n": 13,
+      "req_usecase_syntax_pass_rate": 1.0,
+      "req_usecase_syntax_pass_count": 13,
+      "logical_xcom_compile_pass_rate": 1.0,
+      "logical_xcom_compile_pass_count": 13,
+      "physical_xcom_compile_pass_rate": 1.0,
+      "physical_xcom_compile_pass_count": 13,
+      "all_hard_pass_rate": 1.0,
+      "all_hard_pass_count": 13,
+      "logical_architecture_reasonableness_mean": 2.8461538461538463,
+      "logical_architecture_reasonableness_stdev": 0.8006407690254357,
+      "physical_architecture_reasonableness_mean": 4.230769230769231,
+      "physical_architecture_reasonableness_stdev": 0.9268086959962983,
+      "logical_simulation_meaningfulness_mean": 2.6923076923076925,
+      "logical_simulation_meaningfulness_stdev": 1.031553471276484,
+      "physical_simulation_meaningfulness_mean": 4.230769230769231,
+      "physical_simulation_meaningfulness_stdev": 1.0919284281983377,
+      "logical_physical_consistency_mean": 3.230769230769231,
+      "logical_physical_consistency_stdev": 1.0919284281983377
+    },
+    "single_agent_sequential_oneshot": {
+      "n": 13,
+      "req_usecase_syntax_pass_rate": 1.0,
+      "req_usecase_syntax_pass_count": 13,
+      "logical_xcom_compile_pass_rate": 0.0,
+      "logical_xcom_compile_pass_count": 0,
+      "physical_xcom_compile_pass_rate": 0.0,
+      "physical_xcom_compile_pass_count": 0,
+      "all_hard_pass_rate": 0.0,
+      "all_hard_pass_count": 0,
+      "logical_architecture_reasonableness_mean": 3.4615384615384617,
+      "logical_architecture_reasonableness_stdev": 0.7762500258061849,
+      "physical_architecture_reasonableness_mean": 3.5384615384615383,
+      "physical_architecture_reasonableness_stdev": 0.9674179220468452,
+      "logical_simulation_meaningfulness_mean": 3.4615384615384617,
+      "logical_simulation_meaningfulness_stdev": 0.8770580193070292,
+      "physical_simulation_meaningfulness_mean": 3.923076923076923,
+      "physical_simulation_meaningfulness_stdev": 0.7595545253127499,
+      "logical_physical_consistency_mean": 2.8461538461538463,
+      "logical_physical_consistency_stdev": 1.0681880176381127
+    }
+  }
+}

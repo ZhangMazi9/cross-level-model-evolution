@@ -1,0 +1,240 @@
+Req main_landing_gear_requirement
+
+stakeholder aircraft:
+end;
+
+stakeholder pilot:
+end;
+
+stakeholder maintainer:
+end;
+
+stakeholder landing_gear_designer:
+end;
+
+stakeholder certification_authority:
+end;
+
+requirement req0:
+Id: "MLG-REQ-000";
+Text: "The main landing gear shall provide safe vertical support and shock absorption for the aircraft under specified vertical landing impact and drop-test conditions.";
+end;
+
+requirement req1:
+Id: "MLG-REQ-001";
+Text: "The main landing gear shall satisfy the functional requirements for vertical load support, ground contact support, vertical load transfer, impact absorption, damping energy dissipation, and controlled rebound.";
+end;
+
+requirement req2:
+Id: "MLG-REQ-002";
+Text: "The main landing gear shall support the aircraft vertical load transmitted through the landing gear attachment structure during specified landing impact conditions.";
+end;
+
+requirement req3:
+Id: "MLG-REQ-003";
+Text: "The wheel and tire assembly shall provide ground contact support when the main landing gear contacts the runway surface during vertical landing impact.";
+end;
+
+requirement req4:
+Id: "MLG-REQ-004";
+Text: "The main landing gear shall transfer vertical impact loads from the wheel and tire assembly through the shock strut and structural attachment path to the aircraft structure.";
+end;
+
+requirement req5:
+Id: "MLG-REQ-005";
+Text: "The main landing gear shall absorb vertical landing impact energy through controlled compression of its shock absorption assembly.";
+end;
+
+requirement req6:
+Id: "MLG-REQ-006";
+Text: "The main landing gear shall dissipate impact energy during compression and rebound to support a controlled vertical response.";
+end;
+
+requirement req7:
+Id: "MLG-REQ-007";
+Text: "The main landing gear shall provide controlled rebound after shock strut compression under specified vertical landing impact conditions.";
+end;
+
+requirement req8:
+Id: "MLG-REQ-008";
+Text: "The main landing gear shall satisfy the non-functional requirements for landing impact performance, physical design, operating environment adaptation, and service suitability.";
+end;
+
+requirement req9:
+Id: "MLG-REQ-009";
+Text: "The main landing gear shall satisfy the performance requirements for vertical shock acceleration, compression stroke, bottoming prevention, and post-impact stability.";
+end;
+
+requirement req10:
+Id: "MLG-REQ-010";
+Text: "The main landing gear shall limit the peak vertical shock acceleration transmitted to the supported aircraft structure within the specified limit.";
+end;
+
+requirement req29:
+Id: "MLG-REQ-010A";
+Text: "The main landing gear shall limit the maximum positive peak of the piston rod vertical acceleration time history, max_t(piston_zdd_out(t)), to less than 20 m/s^2 during the drop process.";
+end;
+
+requirement req11:
+Id: "MLG-REQ-011";
+Text: "The shock strut shall limit maximum compression stroke within the specified limit during vertical landing impact.";
+end;
+
+requirement req12:
+Id: "MLG-REQ-012";
+Text: "The shock strut shall prevent hard bottoming under specified vertical landing impact conditions.";
+end;
+
+requirement req13:
+Id: "MLG-REQ-013";
+Text: "The main landing gear shall recover to a stable ground-support state after the vertical impact and rebound response.";
+end;
+
+requirement req14:
+Id: "MLG-REQ-014";
+Text: "The main landing gear shall satisfy the design requirements for tire vertical buffering, oleo-pneumatic shock absorption, gas elastic recovery, hydraulic damping, sealing integrity, and load-path integrity.";
+end;
+
+requirement req15:
+Id: "MLG-REQ-015";
+Text: "The tire shall provide vertical stiffness characteristics within the allowed range needed to meet the specified landing impact buffering requirement.";
+end;
+
+requirement req16:
+Id: "MLG-REQ-016";
+Text: "The oleo-pneumatic shock strut shall provide compression and extension characteristics needed to meet the specified impact absorption and rebound control requirements.";
+end;
+
+requirement req17:
+Id: "MLG-REQ-017";
+Text: "The gas chamber of the shock strut shall provide elastic restoring force during and after shock strut compression.";
+end;
+
+requirement req18:
+Id: "MLG-REQ-018";
+Text: "The hydraulic damping path of the shock strut shall provide damping characteristics within the allowed range needed for impact energy dissipation and rebound control.";
+end;
+
+requirement req19:
+Id: "MLG-REQ-019";
+Text: "The shock strut shall maintain oil and gas sealing integrity required for oleo-pneumatic load support, energy absorption, and elastic recovery.";
+end;
+
+requirement req20:
+Id: "MLG-REQ-020";
+Text: "The main landing gear connection structure shall maintain the integrity and alignment of the vertical load path from tire contact through the shock strut to the aircraft attachment structure.";
+end;
+
+requirement req21:
+Id: "MLG-REQ-021";
+Text: "The main landing gear shall satisfy the environmental requirements for specified landing impact, runway contact, and repeated load-cycle conditions.";
+end;
+
+requirement req22:
+Id: "MLG-REQ-022";
+Text: "The main landing gear shall maintain the required vertical support and shock absorption capability when subjected to the specified vertical landing impact environment.";
+end;
+
+requirement req23:
+Id: "MLG-REQ-023";
+Text: "The wheel and tire assembly shall maintain stable contact support with the runway surface under the specified runway contact condition.";
+end;
+
+requirement req24:
+Id: "MLG-REQ-024";
+Text: "The main landing gear structural members, tire, wheel assembly, and shock strut shall withstand the specified repeated vertical load-cycle conditions without loss of required vertical support and shock absorption capability.";
+end;
+
+requirement req25:
+Id: "MLG-REQ-025";
+Text: "The main landing gear shall satisfy the suitability requirements for inspection, maintenance, wear-item replacement, and minimum safe capability under allowed performance degradation.";
+end;
+
+requirement req26:
+Id: "MLG-REQ-026";
+Text: "The main landing gear shall allow inspection and maintenance of the tire, wheel assembly, shock strut, hydraulic fluid path, gas chamber, seals, and primary structural joints.";
+end;
+
+requirement req27:
+Id: "MLG-REQ-027";
+Text: "The main landing gear shall support replacement or servicing of wear-sensitive items associated with tire contact, oleo sealing, and hydraulic damping performance.";
+end;
+
+requirement req28:
+Id: "MLG-REQ-028";
+Text: "When key buffering components experience performance deviation, wear, or degradation within the allowed range, the main landing gear shall retain the specified minimum safe landing support and buffering capability.";
+end;
+
+traciability:
+derive(aircraft,req0);
+derive(pilot,req0);
+derive(landing_gear_designer,req0);
+derive(certification_authority,req0);
+derive(maintainer,req25);
+
+compose(req1,req0);
+compose(req2,req1);
+compose(req3,req1);
+compose(req4,req1);
+compose(req5,req1);
+compose(req6,req1);
+compose(req7,req1);
+
+compose(req8,req0);
+compose(req9,req8);
+compose(req10,req9);
+compose(req29,req10);
+compose(req11,req9);
+compose(req12,req9);
+compose(req13,req9);
+
+compose(req14,req8);
+compose(req15,req14);
+compose(req16,req14);
+compose(req17,req14);
+compose(req18,req14);
+compose(req19,req14);
+compose(req20,req14);
+
+compose(req21,req8);
+compose(req22,req21);
+compose(req23,req21);
+compose(req24,req21);
+
+compose(req25,req8);
+compose(req26,req25);
+compose(req27,req25);
+compose(req28,req25);
+
+derive(aircraft,req2);
+derive(aircraft,req4);
+derive(aircraft,req10);
+derive(aircraft,req29);
+derive(pilot,req7);
+derive(pilot,req13);
+derive(landing_gear_designer,req1);
+derive(landing_gear_designer,req3);
+derive(landing_gear_designer,req5);
+derive(landing_gear_designer,req6);
+derive(landing_gear_designer,req9);
+derive(landing_gear_designer,req29);
+derive(landing_gear_designer,req14);
+derive(landing_gear_designer,req15);
+derive(landing_gear_designer,req16);
+derive(landing_gear_designer,req17);
+derive(landing_gear_designer,req18);
+derive(landing_gear_designer,req19);
+derive(landing_gear_designer,req20);
+derive(landing_gear_designer,req21);
+derive(landing_gear_designer,req22);
+derive(landing_gear_designer,req23);
+derive(landing_gear_designer,req24);
+derive(certification_authority,req10);
+derive(certification_authority,req29);
+derive(certification_authority,req11);
+derive(certification_authority,req12);
+derive(certification_authority,req28);
+derive(maintainer,req26);
+derive(maintainer,req27);
+derive(maintainer,req28);
+end;

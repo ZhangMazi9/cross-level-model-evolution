@@ -1,0 +1,9 @@
+model,group,group_key,n,compile_pass,compile_pass_rate,dynamic_change_pass,dynamic_change_pass_rate
+deepseek-v4-flash-0731,G1,json_ir_guarded,90,80,0.8888888888888888,70,0.7777777777777778
+deepseek-v4-flash-0731,G2,json_ir_ungated,90,25,0.2777777777777778,7,0.07777777777777778
+deepseek-v4-flash-0731,G3,direct_xl_static_gate,90,43,0.4777777777777778,41,0.45555555555555555
+deepseek-v4-flash-0731,G4,direct_xl_ungated,90,42,0.4666666666666667,11,0.12222222222222222
+qwen3.8-flash,G1,json_ir_guarded,90,73,0.8111111111111111,64,0.7111111111111111
+qwen3.8-flash,G2,json_ir_ungated,90,27,0.3,6,0.06666666666666667
+qwen3.8-flash,G3,direct_xl_static_gate,90,24,0.26666666666666666,23,0.25555555555555554
+qwen3.8-flash,G4,direct_xl_ungated,90,21,0.23333333333333334,10,0.1111111111111111

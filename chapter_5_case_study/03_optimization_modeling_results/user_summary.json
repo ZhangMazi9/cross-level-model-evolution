@@ -1,0 +1,85 @@
+﻿{
+  "title": "LandingGearDropOptimization",
+  "optimization_elements": [
+    {
+      "element": "Design variable",
+      "name": "wheel_mass",
+      "subsystem": "EquivalentAirframeWheelMassAssembly",
+      "direction_or_type": "continuous"
+    },
+    {
+      "element": "Design variable",
+      "name": "tire_stiffness",
+      "subsystem": "MainGearTireWheelAssembly",
+      "direction_or_type": "continuous"
+    },
+    {
+      "element": "Design variable",
+      "name": "linear_damping_coeff",
+      "subsystem": "HydraulicDampingChannel",
+      "direction_or_type": "continuous"
+    },
+    {
+      "element": "Design variable",
+      "name": "quadratic_damping_gain",
+      "subsystem": "HydraulicDampingChannel",
+      "direction_or_type": "continuous"
+    },
+    {
+      "element": "Objective",
+      "name": "max_positive_acceleration",
+      "subsystem": "LandingGearAccelerationMetrics",
+      "direction_or_type": "minimize"
+    },
+    {
+      "element": "Objective",
+      "name": "max_negative_acceleration_peak",
+      "subsystem": "LandingGearAccelerationMetrics",
+      "direction_or_type": "minimize"
+    },
+    {
+      "element": "Constraint",
+      "name": "max_positive_acceleration_limit",
+      "subsystem": "LandingGearAccelerationMetrics",
+      "direction_or_type": "max_positive_acceleration <= 20.0 m/s^2"
+    }
+  ],
+  "minimal_validation": [
+    {
+      "check": "variable_count",
+      "status": "pass",
+      "detail": "4 design variable(s)"
+    },
+    {
+      "check": "objective_count",
+      "status": "pass",
+      "detail": "2 objective(s)"
+    },
+    {
+      "check": "constraint_count",
+      "status": "pass",
+      "detail": "1 requirement-derived constraint"
+    },
+    {
+      "check": "binding_check",
+      "status": "pass",
+      "detail": "all selected bindings exist"
+    },
+    {
+      "check": "engineering_semantics",
+      "status": "pass",
+      "detail": "no issues"
+    },
+    {
+      "check": "mdo_syntax",
+      "status": "pass",
+      "detail": "no issues"
+    },
+    {
+      "check": "mdo_text",
+      "status": "pass",
+      "detail": "generated MDO text matches IR"
+    }
+  ]
+}
+

@@ -1,0 +1,22 @@
+System name: main_landing_gear
+
+Stakeholders:
+- aircraft
+- pilot
+- maintainer
+- landing_gear_designer
+- certification_authority
+
+Stakeholder needs:
+- SN.1 safe_vertical_support_and_shock_absorption_need [aircraft]: The main landing gear shall provide safe vertical support and shock absorption under specified vertical landing impact and drop-test conditions. Source: Golden requirement req0
+- SN.2 impact_performance_verification_need [certification_authority]: The main landing gear shall support verification of vertical shock acceleration, piston rod acceleration positive peak limit, compression stroke, bottoming prevention, and post-impact stability. Source: Requirements req8-req13 and derived requirement req29
+- SN.3 shock_absorber_design_need [landing_gear_designer]: The tire, wheel assembly, oleo-pneumatic shock strut, gas chamber, hydraulic damping path, seals, and structural load path shall provide the required buffering and load-transfer behavior. Source: Requirements req14-req20
+- SN.4 environmental_robustness_need [landing_gear_designer]: The main landing gear shall maintain required support and shock absorption capability under specified landing impact, runway contact, and repeated load-cycle conditions. Source: Requirements req21-req24
+- SN.5 service_suitability_need [maintainer]: The main landing gear shall support inspection, maintenance, wear-item servicing, and minimum safe capability under allowed degradation. Source: Requirements req25-req28
+
+Need-to-requirement coverage:
+- SN.1 is covered by MLG-REQ-000 through MLG-REQ-007.
+- SN.2 is covered by MLG-REQ-008 through MLG-REQ-013 and the derived quantitative acceleration requirement MLG-REQ-010A.
+- SN.3 is covered by MLG-REQ-014 through MLG-REQ-020.
+- SN.4 is covered by MLG-REQ-021 through MLG-REQ-024.
+- SN.5 is covered by MLG-REQ-025 through MLG-REQ-028.

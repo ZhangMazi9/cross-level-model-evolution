@@ -1,0 +1,33 @@
+# Local runtime and editor files
+.env
+.env.*
+.user_data/
+__pycache__/
+*.py[cod]
+*.tmp
+*.bak
+
+# Generated build/runtime artifacts
+build/
+dist/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.exe
+*.dll
+*.obj
+*.o
+
+# Publication image format patterns
+*.tif
+*.tiff
+
+# Runtime output patterns
+4_4_experiments/**/_process_logs/
+4_4_experiments/**/*.log
+4_4_experiments/**/runs/full_*/
+4_4_experiments/**/runs/smoke_*/
+4_4_experiments/**/runs/*dynamic*_results*/
+4_4_experiments/**/runs/*simulation_eval*/
+4_4_experiments/**/llm_usage.jsonl
+4_4_experiments/**/raw_response*.txt

@@ -1,0 +1,575 @@
+{
+  "physical_objects": [
+    "EquivalentAirframeMass",
+    "WheelAndTireAssembly",
+    "WheelAxleAndSlidingTube",
+    "ShockStrutSlidingJoint",
+    "HydraulicDampingChannel",
+    "ShockStrutGasChamber",
+    "UpperCylinderAndMainFitting",
+    "RunwaySurface",
+    "StructuralLoadPath"
+  ],
+  "quantities": [
+    "y_s",
+    "y_u",
+    "v_s",
+    "v_u",
+    "release_force",
+    "ground_height",
+    "tire_deflection",
+    "tire_force",
+    "oleo_compression",
+    "oleo_compression_speed",
+    "damping_force",
+    "piston_zdd_out"
+  ],
+  "parameters": [
+    "MLG_Wheel_Mass",
+    "Tire_Stiffness_Approximation",
+    "Forces_Oleo_Damping_Coefficient",
+    "MLG_Oleo_V2_Damping_Coefficient",
+    "gravitational_acceleration",
+    "max_piston_stroke"
+  ],
+  "initial_conditions": {
+    "y_s": 0,
+    "y_u": 0,
+    "v_s": 0,
+    "v_u": 0,
+    "release_force": "initial_support_force",
+    "oleo_compression": 0,
+    "tire_deflection": 0
+  },
+  "boundaries": {
+    "RunwayGroundBoundary": "ground_height constraint",
+    "AirframeAttachment": "supported mass boundary",
+    "DropTestReleaseFixture": "release condition boundary"
+  },
+  "physical_interfaces": [
+    "Tire-ground contact interface",
+    "Wheel-axle to sliding tube interface",
+    "Shock strut sliding joint",
+    "Gas chamber to hydraulic damping path interface",
+    "Structural load path to airframe attachment interface"
+  ],
+  "disturbances_and_excitations": [
+    "gravitational_acceleration",
+    "ground_impact_reaction_force",
+    "release_force_drop"
+  ],
+  "performance_metrics": [
+    "peak_positive_acceleration",
+    "peak_negative_acceleration",
+    "maximum_oleo_compression",
+    "bottoming_margin",
+    "post_impact_stability"
+  ],
+  "simulation_scenario": {
+    "scenario_id": "MainLandingGearDropTest",
+    "horizon_s": 5.0,
+    "description": "Vertical landing impact drop-test scenario for main landing gear, evaluating shock absorption, damping, and rebound."
+  },
+  "scenario_event_schedule": [
+    {
+      "event_id": "EVT_DESCENT_START",
+      "time_s": 0,
+      "scenario": "DescentStart",
+      "trigger_signal": "LOGIC_EVT_DESCENT_START",
+      "value_before": "descent_started=false",
+      "value_after": "descent_started=true",
+      "affected_subsystems": [
+        "DropTestScenarioTimeline",
+        "ReleaseFixtureLogic",
+        "AirframeEquivalentMassLogic",
+        "TireWheelAssemblyLogic",
+        "GroundContactBoundaryLogic",
+        "OleoPneumaticStrutLogic",
+        "HydraulicDampingLogic",
+        "AccelerationObservationLogic"
+      ],
+      "physical_driver": "logical marker for release/drop-test start; physical_reference_time_s=0.0; physical evidence through release_force, y_s, y_u, v_s, v_u",
+      "expected_logic_csv_marker": "LOGIC_EVT_DESCENT_START",
+      "expected_physical_csv_marker": "PHYS_EVT_DESCENT_START"
+    },
+    {
+      "event_id": "EVT_TOUCHDOWN",
+      "time_s": 0.23,
+      "scenario": "Touchdown",
+      "trigger_signal": "LOGIC_EVT_TOUCHDOWN",
+      "value_before": "touchdown=false",
+      "value_after": "touchdown=true",
+      "affected_subsystems": [
+        "DropTestScenarioTimeline",
+        "ReleaseFixtureLogic",
+        "AirframeEquivalentMassLogic",
+        "TireWheelAssemblyLogic",
+        "GroundContactBoundaryLogic",
+        "OleoPneumaticStrutLogic",
+        "HydraulicDampingLogic",
+        "AccelerationObservationLogic"
+      ],
+      "physical_driver": "logical marker for ground contact start; physical_reference_time_s=0.23; physical evidence through ground_height, y_u, tire_deflection",
+      "expected_logic_csv_marker": "LOGIC_EVT_TOUCHDOWN",
+      "expected_physical_csv_marker": "PHYS_EVT_TOUCHDOWN"
+    }
+  ],
+  "logical_simulation_contract": {
+    "scenario_id": "MainLandingGearDropTest",
+    "scenario_states": [
+      {
+        "name": "PreScenario",
+        "trigger_event": "None",
+        "active_subsystems": [
+          "ScenarioTimelineSource",
+          "ScenarioEventMarkerRecorder"
+        ],
+        "supporting_subsystems": [],
+        "inactive_subsystems": [
+          {
+            "subsystem": "DropTestScenarioTimeline",
+            "reason": "Waiting for descent start"
+          },
+          {
+            "subsystem": "ReleaseFixtureLogic",
+            "reason": "Waiting for descent start"
+          },
+          {
+            "subsystem": "AirframeEquivalentMassLogic",
+            "reason": "Waiting for descent start"
+          },
+          {
+            "subsystem": "TireWheelAssemblyLogic",
+            "reason": "Waiting for descent start"
+          },
+          {
+            "subsystem": "GroundContactBoundaryLogic",
+            "reason": "Waiting for descent start"
+          },
+          {
+            "subsystem": "OleoPneumaticStrutLogic",
+            "reason": "Waiting for descent start"
+          },
+          {
+            "subsystem": "HydraulicDampingLogic",
+            "reason": "Waiting for descent start"
+          },
+          {
+            "subsystem": "AccelerationObservationLogic",
+            "reason": "Waiting for descent start"
+          }
+        ],
+        "information_flow": "ScenarioTimelineSource holds initial state, outputs false for events.",
+        "expected_response": "System remains in initial conditions, no physical motion.",
+        "physical_scenario_event": null
+      },
+      {
+        "name": "DescentStart",
+        "trigger_event": "EVT_DESCENT_START",
+        "active_subsystems": [
+          "DropTestScenarioTimeline",
+          "ReleaseFixtureLogic",
+          "AirframeEquivalentMassLogic",
+          "TireWheelAssemblyLogic",
+          "GroundContactBoundaryLogic",
+          "OleoPneumaticStrutLogic",
+          "HydraulicDampingLogic",
+          "AccelerationObservationLogic"
+        ],
+        "supporting_subsystems": [
+          "ScenarioTimelineSource",
+          "ScenarioEventMarkerRecorder"
+        ],
+        "inactive_subsystems": [],
+        "information_flow": "ScenarioTimelineSource broadcasts LOGIC_EVT_DESCENT_START. Subsystems transition to descent-active states.",
+        "expected_response": "Aircraft released, free-fall descent begins. Strut extended, tire airborne.",
+        "physical_scenario_event": "EVT_DESCENT_START"
+      },
+      {
+        "name": "Touchdown",
+        "trigger_event": "EVT_TOUCHDOWN",
+        "active_subsystems": [
+          "DropTestScenarioTimeline",
+          "AirframeEquivalentMassLogic",
+          "TireWheelAssemblyLogic",
+          "GroundContactBoundaryLogic",
+          "OleoPneumaticStrutLogic",
+          "HydraulicDampingLogic",
+          "AccelerationObservationLogic"
+        ],
+        "supporting_subsystems": [
+          "ScenarioTimelineSource",
+          "ScenarioEventMarkerRecorder"
+        ],
+        "inactive_subsystems": [
+          {
+            "subsystem": "ReleaseFixtureLogic",
+            "reason": "InactiveAfterRelease"
+          }
+        ],
+        "information_flow": "ScenarioTimelineSource broadcasts LOGIC_EVT_TOUCHDOWN. Subsystems transition to impact/compression states.",
+        "expected_response": "Tire contacts ground, oleo compresses, damping activates, acceleration peaks observed.",
+        "physical_scenario_event": "EVT_TOUCHDOWN"
+      }
+    ],
+    "key_events": [
+      "EVT_DESCENT_START",
+      "EVT_TOUCHDOWN"
+    ],
+    "event_timing": {
+      "logical_sequence": [
+        "EVT_DESCENT_START at 0.0 s",
+        "EVT_TOUCHDOWN at 0.23 s"
+      ],
+      "physical_scenario_time": {
+        "EVT_DESCENT_START": 0.0,
+        "EVT_TOUCHDOWN": 0.23
+      },
+      "inheritance_rules": "Physical model stages inherit only physical_scenario_time, scenario events, variables, subsystem roles, information flow, control goals, and expected physical response. They must not inherit SystemModel entry_hold_time/statehold values as physical durations."
+    },
+    "key_logical_variables": [
+      "LOGIC_EVT_DESCENT_START",
+      "LOGIC_EVT_TOUCHDOWN",
+      "descent_scenario_active",
+      "touchdown_scenario_active",
+      "release_fixture_released",
+      "release_fixture_inactive",
+      "airframe_descent_active",
+      "impact_load_transfer_active",
+      "clearance_tracking_active",
+      "tire_contact_established",
+      "clearance_boundary_monitoring",
+      "contact_constraint_active",
+      "stroke_available",
+      "compression_stroke_active",
+      "relative_motion_monitoring",
+      "damping_activated",
+      "baseline_acceleration_recording",
+      "impact_acceleration_monitoring"
+    ],
+    "controlled_variables": [
+      "descent_scenario_active",
+      "touchdown_scenario_active",
+      "release_fixture_released",
+      "release_fixture_inactive",
+      "airframe_descent_active",
+      "impact_load_transfer_active",
+      "clearance_tracking_active",
+      "tire_contact_established",
+      "clearance_boundary_monitoring",
+      "contact_constraint_active",
+      "stroke_available",
+      "compression_stroke_active",
+      "relative_motion_monitoring",
+      "damping_activated",
+      "baseline_acceleration_recording",
+      "impact_acceleration_monitoring"
+    ],
+    "control_objectives": [
+      "Ensure logical events trigger correct physical-mapped subsystem state transitions.",
+      "Maintain strict separation between logical scenario scheduling and physical response timing.",
+      "Provide clear inheritance intent for physical model boundary conditions and event markers."
+    ],
+    "subsystem_roles": [
+      {
+        "subsystem": "ScenarioTimelineSource",
+        "role_per_scenario": {
+          "PreScenario": "supporting",
+          "DescentStart": "supporting",
+          "Touchdown": "supporting"
+        }
+      },
+      {
+        "subsystem": "ScenarioEventMarkerRecorder",
+        "role_per_scenario": {
+          "PreScenario": "supporting",
+          "DescentStart": "supporting",
+          "Touchdown": "supporting"
+        }
+      },
+      {
+        "subsystem": "DropTestScenarioTimeline",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "active"
+        }
+      },
+      {
+        "subsystem": "ReleaseFixtureLogic",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "inactive_with_reason: InactiveAfterRelease"
+        }
+      },
+      {
+        "subsystem": "AirframeEquivalentMassLogic",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "active"
+        }
+      },
+      {
+        "subsystem": "TireWheelAssemblyLogic",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "active"
+        }
+      },
+      {
+        "subsystem": "GroundContactBoundaryLogic",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "active"
+        }
+      },
+      {
+        "subsystem": "OleoPneumaticStrutLogic",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "active"
+        }
+      },
+      {
+        "subsystem": "HydraulicDampingLogic",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "active"
+        }
+      },
+      {
+        "subsystem": "AccelerationObservationLogic",
+        "role_per_scenario": {
+          "PreScenario": "inactive_with_reason: Waiting for descent start",
+          "DescentStart": "active",
+          "Touchdown": "active"
+        }
+      }
+    ],
+    "information_flow": [
+      "ScenarioTimelineSource generates LOGIC_EVT_DESCENT_START and LOGIC_EVT_TOUCHDOWN markers.",
+      "Markers are broadcast to all domain subsystems via direct connections.",
+      "Domain subsystems update their internal state and output activation flags to indicate mode readiness for physical mapping.",
+      "ScenarioEventMarkerRecorder passively monitors markers for trace alignment."
+    ],
+    "physical_scenario_drivers": [
+      {
+        "driver": "Release/drop-test start",
+        "physical_reference_time_s": 0.0,
+        "intent": "Boundary condition changes from supported to free-fall. Physical evidence through release_force, y_s, y_u, v_s, v_u."
+      },
+      {
+        "driver": "Ground contact start",
+        "physical_reference_time_s": 0.23,
+        "intent": "Boundary condition changes from airborne to ground contact constraint. Physical evidence through ground_height, y_u, tire_deflection."
+      }
+    ],
+    "expected_physical_response": {
+      "qualitative_direction": "Tire deflection and force rise after touchdown. Oleo compression increases. Damping force follows compression speed during impact. Piston rod vertical acceleration peaks are captured for positive peak limit verification.",
+      "feedback_compensation_evaluation_intent": "Identify rebound and settling only after physical trace shows reversal/decay behavior. Evaluate optimization parameters: MLG Wheel Mass, Tire Stiffness Approximation, Forces Oleo Damping Coefficient, MLG Oleo V^2 Damping Coefficient.",
+      "variables_to_observe": [
+        "piston_zdd_out",
+        "y_s",
+        "y_u",
+        "v_s",
+        "v_u",
+        "release_force",
+        "ground_height",
+        "tire_deflection",
+        "tire_force",
+        "oleo_compression",
+        "oleo_compression_speed",
+        "damping_force"
+      ]
+    },
+    "acceptance_intent": [
+      "Executable logical model includes the eight physical/component-mapped domain logical subsystems.",
+      "Final scenario_event_schedule has exactly two external events.",
+      "Only expected logic CSV markers are LOGIC_EVT_DESCENT_START and LOGIC_EVT_TOUCHDOWN.",
+      "Internal physical response tags do not appear as scheduled external events.",
+      "XLanguage logical model compiles and runs through XCom without errors."
+    ],
+    "csv_trace_summary": {
+      "status": "pass",
+      "compile_returncode": 0,
+      "run_returncode": 0,
+      "csv_count": 10,
+      "observed_current_states": [
+        "AirborneNoContact",
+        "BeforeSchedule",
+        "DampingStandby",
+        "EvtDescentStart",
+        "EvtTouchdown",
+        "ExtendedStroke",
+        "GroundReferenceDefined",
+        "HoldingAircraft",
+        "Monitoring",
+        "ObservationIdle",
+        "PreScenario",
+        "SupportedInitialCondition"
+      ],
+      "scenario_coverage_status": "pass",
+      "module_coverage_status": "pass",
+      "notes": "Logical XCom run produced nonzero-time CSV traces and covered every expected scenario state."
+    }
+  },
+  "logic_physics_mapping": {
+    "controlled_variable": [
+      "release_force",
+      "ground_contact_constraint",
+      "gravity_load"
+    ],
+    "disturbance_or_excitation": [
+      "gravitational_acceleration",
+      "ground_impact_reaction_force"
+    ],
+    "physical_plant": [
+      "EquivalentAirframeWheelMassAssembly",
+      "MainGearTireWheelAssembly",
+      "OleoPneumaticShockStrutAssembly",
+      "StructuralLoadPath",
+      "RunwayGroundBoundary"
+    ],
+    "performance_outputs": [
+      "piston_zdd_out",
+      "oleo_compression",
+      "tire_deflection",
+      "tire_force",
+      "damping_force"
+    ],
+    "safety_or_constraint_metrics": [
+      "peak_positive_acceleration",
+      "peak_negative_acceleration",
+      "maximum_oleo_compression",
+      "bottoming_margin",
+      "post_impact_stability"
+    ],
+    "feedback_or_evaluation_path": [
+      "Continuous monitoring of piston_zdd_out, oleo_compression, and tire_deflection",
+      "Post-processing of time-series data to extract peak acceleration and max stroke",
+      "Evaluation of rebound decay and stable ground support recovery"
+    ],
+    "required_physical_entities": [
+      "EquivalentAirframeMass",
+      "WheelAndTireAssembly",
+      "WheelAxleAndSlidingTube",
+      "ShockStrutSlidingJoint",
+      "HydraulicDampingChannel",
+      "ShockStrutGasChamber",
+      "UpperCylinderAndMainFitting",
+      "RunwaySurface"
+    ],
+    "required_physical_signals": [
+      "y_s",
+      "y_u",
+      "v_s",
+      "v_u",
+      "release_force",
+      "ground_height",
+      "tire_deflection",
+      "tire_force",
+      "oleo_compression",
+      "oleo_compression_speed",
+      "damping_force",
+      "piston_zdd_out"
+    ],
+    "physical_scenario_drivers": [
+      {
+        "driver": "Release/drop-test start",
+        "physical_reference_time_s": 0.0,
+        "intent": "Boundary condition changes from supported to free-fall. Physical evidence through release_force, y_s, y_u, v_s, v_u."
+      },
+      {
+        "driver": "Ground contact start",
+        "physical_reference_time_s": 0.23,
+        "intent": "Boundary condition changes from airborne to ground contact constraint. Physical evidence through ground_height, y_u, tire_deflection."
+      }
+    ],
+    "scenario_event_mapping": {
+      "EVT_DESCENT_START": "release_force drops to 0, gravity becomes the sole vertical force on the equivalent mass",
+      "EVT_TOUCHDOWN": "ground_height constraint activates, tire_deflection > 0, ground reaction force applies"
+    },
+    "event_timing": {
+      "logical_sequence": [
+        "EVT_DESCENT_START at 0.0 s",
+        "EVT_TOUCHDOWN at 0.23 s"
+      ],
+      "physical_scenario_time": {
+        "EVT_DESCENT_START": 0.0,
+        "EVT_TOUCHDOWN": 0.23
+      },
+      "inheritance_rules": "Physical model stages inherit only physical_scenario_time, scenario events, variables, subsystem roles, information flow, control goals, and expected physical response. They must not inherit SystemModel entry_hold_time/statehold values as physical durations."
+    },
+    "expected_physical_response": {
+      "qualitative_direction": "Tire deflection and force rise after touchdown. Oleo compression increases. Damping force follows compression speed during impact. Piston rod vertical acceleration peaks are captured for positive peak limit verification.",
+      "feedback_compensation_evaluation_intent": "Identify rebound and settling only after physical trace shows reversal/decay behavior. Evaluate optimization parameters: MLG Wheel Mass, Tire Stiffness Approximation, Forces Oleo Damping Coefficient, MLG Oleo V^2 Damping Coefficient.",
+      "variables_to_observe": [
+        "piston_zdd_out",
+        "y_s",
+        "y_u",
+        "v_s",
+        "v_u",
+        "release_force",
+        "ground_height",
+        "tire_deflection",
+        "tire_force",
+        "oleo_compression",
+        "oleo_compression_speed",
+        "damping_force"
+      ]
+    },
+    "controlled_variables": [
+      "release_force",
+      "ground_contact_constraint",
+      "airframe_descent_state",
+      "tire_contact_state",
+      "oleo_compression_state",
+      "damping_activation_state"
+    ],
+    "control_objectives": [
+      "Ensure logical events trigger correct physical boundary condition changes and state transitions.",
+      "Maintain strict separation between logical scenario scheduling and physical response timing.",
+      "Provide clear inheritance intent for physical model boundary conditions and event markers.",
+      "Verify vertical shock acceleration, piston rod acceleration positive peak less than 20 m/s^2, compression stroke, bottoming prevention, and post-impact stability."
+    ],
+    "subsystem_role_mapping": {
+      "ScenarioTimelineSource": "PhysicalScenarioClock",
+      "DropTestScenarioTimeline": "PhysicalScenarioPhaseTracker",
+      "ReleaseFixtureLogic": "ReleaseFixtureActuator",
+      "AirframeEquivalentMassLogic": "AirframeMassDynamics",
+      "TireWheelAssemblyLogic": "TireContactDynamics",
+      "GroundContactBoundaryLogic": "GroundConstraintEnforcer",
+      "OleoPneumaticStrutLogic": "OleoGasSpringDynamics",
+      "HydraulicDampingLogic": "HydraulicDamperDynamics",
+      "AccelerationObservationLogic": "SensorAndTelemetrySystem",
+      "ScenarioEventMarkerRecorder": "DataLogger"
+    },
+    "information_flow_mapping": [
+      "PhysicalScenarioClock broadcasts time triggers to switch boundary conditions.",
+      "ReleaseFixtureActuator sends release_force signal to AirframeMassDynamics to dictate external vertical load.",
+      "GroundConstraintEnforcer sends ground_height constraint to TireContactDynamics to trigger tire_deflection calculation.",
+      "TireContactDynamics transmits tire_force through WheelAxleAndSlidingTube to OleoGasSpringDynamics.",
+      "OleoGasSpringDynamics provides oleo_compression_speed to HydraulicDamperDynamics to drive damping_force calculation.",
+      "SensorAndTelemetrySystem streams piston_zdd_out, y_s, y_u, and other signals to DataLogger for CSV recording."
+    ],
+    "scenario_alignment_rules": [
+      "Physical simulation time must strictly follow physical_scenario_time for event triggers (0.0s and 0.23s).",
+      "Do not use logical entry_hold_time or statehold values as physical process durations.",
+      "Physical responses (compression, rebound, damping decay) must emerge naturally from the physical plant dynamics, not from scheduled logical events.",
+      "The 5.0s simulation horizon is an observation stop time, not a physical event."
+    ],
+    "forbidden_unrelated_concepts": [
+      "Maintenance tasks, inspection, wear-item servicing",
+      "Certification review processes, report generation",
+      "Logical statehold/entry_hold_time values interpreted as physical time delays",
+      "Scheduling physical response phases (e.g., max compression, rebound) as external logical events",
+      "Unrelated aircraft systems (e.g., flight control, navigation)"
+    ]
+  }
+}

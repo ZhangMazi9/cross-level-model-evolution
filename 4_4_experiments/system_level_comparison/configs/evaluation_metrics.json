@@ -1,0 +1,75 @@
+{
+  "schema_version": "metrics.v1",
+  "primary_pass_fail_metrics": [
+    {
+      "metric_id": "req_usecase_syntax_pass",
+      "description": "Requirement model and use-case model pass their syntax validators.",
+      "scoring": "pass_or_fail"
+    },
+    {
+      "metric_id": "logical_xcom_compile_pass",
+      "description": "Logical model passes XCom compilation. If the available summary only reports compile+run together, status=pass is accepted as compile pass.",
+      "scoring": "pass_or_fail"
+    },
+    {
+      "metric_id": "physical_xcom_compile_pass",
+      "description": "Physical model passes XCom compilation. If the available summary only reports compile+run together, status=pass is accepted as compile pass.",
+      "scoring": "pass_or_fail"
+    }
+  ],
+  "llm_judge_metrics": [
+    {
+      "metric_id": "logical_architecture_reasonableness",
+      "description": "Whether logical subsystem decomposition, ports, states, transitions, and connections are reasonable for the requirement.",
+      "scale": "1_to_5"
+    },
+    {
+      "metric_id": "physical_architecture_reasonableness",
+      "description": "Whether physical components, boundaries, sensors, actuators, controllers/evaluators, and interfaces are reasonable and traceable.",
+      "scale": "1_to_5"
+    },
+    {
+      "metric_id": "logical_simulation_meaningfulness",
+      "description": "Whether logical simulation events, mode changes, and state transitions match the requirement rather than being empty or merely formal.",
+      "scale": "1_to_5"
+    },
+    {
+      "metric_id": "physical_simulation_meaningfulness",
+      "description": "Whether physical variables, equations, disturbances, boundary conditions, and response directions have plausible physical meaning.",
+      "scale": "1_to_5"
+    },
+    {
+      "metric_id": "logical_physical_consistency",
+      "description": "Whether the physical model faithfully refines the logical model through consistent subsystem-to-component mapping, interfaces/signals, event scenarios, control objectives, monitored quantities, and simulation variables.",
+      "scale": "1_to_5"
+    }
+  ],
+  "secondary_recorded_metrics": [
+    {
+      "metric_id": "repair_iterations",
+      "description": "Number of internal repair loops used before final result.",
+      "unit": "count"
+    },
+    {
+      "metric_id": "wall_clock_seconds",
+      "description": "Total execution time for the task.",
+      "unit": "seconds"
+    },
+    {
+      "metric_id": "api_call_count",
+      "description": "Total LLM calls issued by the group for the task, when available.",
+      "unit": "count"
+    },
+    {
+      "metric_id": "token_usage_total",
+      "description": "Total prompt and completion tokens, when available.",
+      "unit": "tokens"
+    }
+  ],
+  "aggregation_plan": {
+    "hard_success_rate": "percentage of tasks passing all three pass/fail metrics",
+    "per_metric_pass_rate": "percentage of tasks passing each individual hard metric",
+    "llm_judge_report": "mean and standard deviation for each 1-5 LLM judge metric after anonymizing group labels; report both valid-output-only means and all-task means that include missing final outputs as score 1",
+    "efficiency_report": "median and interquartile range for time, calls, tokens, and repairs when available"
+  }
+}

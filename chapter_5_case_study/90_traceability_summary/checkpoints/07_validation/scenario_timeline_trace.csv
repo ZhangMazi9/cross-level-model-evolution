@@ -1,0 +1,13 @@
+time,variable,value
+0,current_state,BeforeSchedule
+0,LOGIC_EVT_DESCENT_START,0
+0,LOGIC_EVT_TOUCHDOWN,0
+0,current_state,EvtDescentStart
+0,LOGIC_EVT_DESCENT_START,0
+0,LOGIC_EVT_TOUCHDOWN,0
+0.23,current_state,EvtTouchdown
+0.23,LOGIC_EVT_DESCENT_START,0
+0.23,LOGIC_EVT_TOUCHDOWN,0
+5,current_state,HorizonComplete
+5,LOGIC_EVT_DESCENT_START,0
+5,LOGIC_EVT_TOUCHDOWN,0

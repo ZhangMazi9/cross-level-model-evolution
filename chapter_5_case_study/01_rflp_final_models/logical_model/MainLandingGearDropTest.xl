@@ -1,0 +1,434 @@
+﻿package MainLandingGearDropTest
+    discrete ScenarioTimelineSource
+      port:
+      event output bool LOGIC_EVT_DESCENT_START;
+      event output bool LOGIC_EVT_TOUCHDOWN;
+      state:
+      initial state BeforeSchedule
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(EvtDescentStart);
+      send(LOGIC_EVT_DESCENT_START, true);
+      send(LOGIC_EVT_DESCENT_START, true);
+      end;
+      end;
+      
+      state EvtDescentStart
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(EvtTouchdown);
+      send(LOGIC_EVT_DESCENT_START, false);
+      send(LOGIC_EVT_TOUCHDOWN, true);
+      send(LOGIC_EVT_TOUCHDOWN, true);
+      end;
+      end;
+      
+      state EvtTouchdown
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(HorizonComplete);
+      send(LOGIC_EVT_TOUCHDOWN, false);
+      end;
+      end;
+      
+      state HorizonComplete
+      end;
+      
+    end;
+
+    discrete DropTestScenarioTimeline
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real descent_scenario_active;
+      event output real touchdown_scenario_active;
+      state:
+      initial state PreScenario
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(DescentScenarioActive);
+      send(descent_scenario_active, 1);
+      end;
+      end;
+      
+      state DescentScenarioActive
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(TouchdownScenarioActiveEntry);
+      send(touchdown_scenario_active, 1);
+      end;
+      end;
+
+      state TouchdownScenarioActiveEntry
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(ScenarioHorizonComplete);
+      send(descent_scenario_active, 0);
+      send(touchdown_scenario_active, 0);
+      end;
+      end;
+
+      state ScenarioHorizonComplete
+      end;
+      
+    end;
+
+    discrete ReleaseFixtureLogic
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real release_fixture_inactive;
+      event output real release_fixture_released;
+      state:
+      initial state HoldingAircraft
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(Released);
+      send(release_fixture_released, 1);
+      end;
+      end;
+      
+      state Released
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(InactiveAfterRelease);
+      send(release_fixture_inactive, 1);
+      end;
+      end;
+
+      state InactiveAfterRelease
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(ReleaseTimelineComplete);
+      send(release_fixture_released, 0);
+      end;
+      end;
+
+      state ReleaseTimelineComplete
+      end;
+      
+    end;
+
+    discrete AirframeEquivalentMassLogic
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real airframe_descent_active;
+      event output real impact_load_transfer_active;
+      state:
+      initial state SupportedInitialCondition
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(ReleasedDescent);
+      send(airframe_descent_active, 1);
+      end;
+      end;
+      
+      state ReleasedDescent
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(ImpactLoadTransfer);
+      send(impact_load_transfer_active, 1);
+      end;
+      end;
+
+      state ImpactLoadTransfer
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(AirframeResponseObservationComplete);
+      send(airframe_descent_active, 0);
+      end;
+      end;
+
+      state AirframeResponseObservationComplete
+      end;
+      
+    end;
+
+    discrete TireWheelAssemblyLogic
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real clearance_tracking_active;
+      event output real tire_contact_established;
+      state:
+      initial state AirborneNoContact
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(ClearanceTracking);
+      send(clearance_tracking_active, 1);
+      end;
+      end;
+      
+      state ClearanceTracking
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(ContactEstablished);
+      send(tire_contact_established, 1);
+      end;
+      end;
+
+      state ContactEstablished
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(TireContactObservationComplete);
+      send(clearance_tracking_active, 0);
+      end;
+      end;
+
+      state TireContactObservationComplete
+      end;
+      
+    end;
+
+    discrete GroundContactBoundaryLogic
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real clearance_boundary_monitoring;
+      event output real contact_constraint_active;
+      state:
+      initial state GroundReferenceDefined
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(ClearanceBoundaryMonitoring);
+      send(clearance_boundary_monitoring, 1);
+      end;
+      end;
+      
+      state ClearanceBoundaryMonitoring
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(ContactConstraintActive);
+      send(contact_constraint_active, 1);
+      end;
+      end;
+
+      state ContactConstraintActive
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(GroundContactObservationComplete);
+      send(clearance_boundary_monitoring, 0);
+      end;
+      end;
+
+      state GroundContactObservationComplete
+      end;
+      
+    end;
+
+    discrete OleoPneumaticStrutLogic
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real compression_stroke_active;
+      event output real stroke_available;
+      state:
+      initial state ExtendedStroke
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(StrokeAvailable);
+      send(stroke_available, 1);
+      end;
+      end;
+      
+      state StrokeAvailable
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(CompressionStroke);
+      send(compression_stroke_active, 1);
+      end;
+      end;
+
+      state CompressionStroke
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(StrutResponseObservationComplete);
+      send(stroke_available, 0);
+      end;
+      end;
+
+      state StrutResponseObservationComplete
+      end;
+      
+    end;
+
+    discrete HydraulicDampingLogic
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real damping_activated;
+      event output real relative_motion_monitoring;
+      state:
+      initial state DampingStandby
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(RelativeMotionMonitoring);
+      send(relative_motion_monitoring, 1);
+      end;
+      end;
+      
+      state RelativeMotionMonitoring
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(DampingActivated);
+      send(damping_activated, 1);
+      end;
+      end;
+
+      state DampingActivated
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(DampingObservationComplete);
+      send(relative_motion_monitoring, 0);
+      end;
+      end;
+
+      state DampingObservationComplete
+      end;
+      
+    end;
+
+    discrete AccelerationObservationLogic
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      event output real baseline_acceleration_recording;
+      event output real impact_acceleration_monitoring;
+      state:
+      initial state ObservationIdle
+      when entry then
+      statehold(0.0);
+      end;
+      when timeout then
+      transition(BaselineAccelerationRecording);
+      send(baseline_acceleration_recording, 1);
+      end;
+      end;
+      
+      state BaselineAccelerationRecording
+      when entry then
+      statehold(0.23);
+      end;
+      when timeout then
+      transition(ImpactAccelerationMonitoring);
+      send(impact_acceleration_monitoring, 1);
+      end;
+      end;
+
+      state ImpactAccelerationMonitoring
+      when entry then
+      statehold(4.77);
+      end;
+      when timeout then
+      transition(AccelerationObservationComplete);
+      send(baseline_acceleration_recording, 0);
+      end;
+      end;
+
+      state AccelerationObservationComplete
+      end;
+      
+    end;
+
+    discrete ScenarioEventMarkerRecorder
+      port:
+      event input bool LOGIC_EVT_DESCENT_START;
+      event input bool LOGIC_EVT_TOUCHDOWN;
+      state:
+      initial state Monitoring
+      end;
+      
+    end;
+
+    couple MainLandingGearDropTestSystem
+    part:
+      ScenarioTimelineSource scenarioTimelineSource;
+      DropTestScenarioTimeline dropTestScenarioTimeline;
+      ReleaseFixtureLogic releaseFixtureLogic;
+      AirframeEquivalentMassLogic airframeEquivalentMassLogic;
+      TireWheelAssemblyLogic tireWheelAssemblyLogic;
+      GroundContactBoundaryLogic groundContactBoundaryLogic;
+      OleoPneumaticStrutLogic oleoPneumaticStrutLogic;
+      HydraulicDampingLogic hydraulicDampingLogic;
+      AccelerationObservationLogic accelerationObservationLogic;
+      ScenarioEventMarkerRecorder scenarioEventMarkerRecorder;
+    connection:
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,dropTestScenarioTimeline.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,dropTestScenarioTimeline.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,releaseFixtureLogic.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,releaseFixtureLogic.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,airframeEquivalentMassLogic.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,airframeEquivalentMassLogic.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,tireWheelAssemblyLogic.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,tireWheelAssemblyLogic.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,groundContactBoundaryLogic.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,groundContactBoundaryLogic.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,oleoPneumaticStrutLogic.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,oleoPneumaticStrutLogic.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,hydraulicDampingLogic.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,hydraulicDampingLogic.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,accelerationObservationLogic.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,accelerationObservationLogic.LOGIC_EVT_TOUCHDOWN);
+      connect(scenarioTimelineSource.LOGIC_EVT_DESCENT_START,scenarioEventMarkerRecorder.LOGIC_EVT_DESCENT_START);
+      connect(scenarioTimelineSource.LOGIC_EVT_TOUCHDOWN,scenarioEventMarkerRecorder.LOGIC_EVT_TOUCHDOWN);
+    end;
+
+    pruning:
+        instance sys of MainLandingGearDropTestSystem {}
+    end;
+end;
+
+simulation of MainLandingGearDropTest {
+    run instance sys;
+    solver StopTime = 4.999;
+}
+

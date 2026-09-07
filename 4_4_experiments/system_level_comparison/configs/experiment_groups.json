@@ -1,0 +1,63 @@
+{
+  "schema_version": "setup.v1",
+  "setup_only": false,
+  "project": "rflp_agent_comparison_experiment",
+  "task_set": "tasks/rflp_benchmark_tasks.jsonl",
+  "metrics": "configs/evaluation_metrics.json",
+  "common_controls": {
+    "base_model_env": "XLANG_MODEL",
+    "default_model": "qwen3.7-plus",
+    "temperature": 0,
+    "max_repairs": 6,
+    "recursion_limit": 900,
+    "xcom_timeout_seconds": 3600,
+    "memory_policy": "disabled_for_all_groups",
+    "manual_intervention_policy": "none_during_run",
+    "output_root_template": "runs/{run_id}/{group_id}/{task_id}",
+    "final_required_artifacts": [
+      "requirement/{base_name}_needs.txt",
+      "requirement/{base_name}_context.txt",
+      "usecase/{base_name}_usecase.json",
+      "usecase/{base_name}_usecase.xl",
+      "analysis/{base_name}_functions.txt",
+      "analysis/{base_name}_subsystems.txt",
+      "requirement/{base_name}_req.json",
+      "requirement/{base_name}_req.xl",
+      "architecture/{base_name}_architecture.txt",
+      "architecture/{base_name}_behavior.txt",
+      "step9/architecture/{base_name}_architecture.json",
+      "step9/architecture/{base_name}_logical_simulation_contract.json",
+      "physical_model_inputs/architecture/{base_name}_logic_physics_mapping.json",
+      "physical_model_inputs/architecture/{base_name}_physical_context.json",
+      "physical_model_inputs/architecture/{base_name}_physical_architecture.txt",
+      "physical_model_inputs/architecture/{base_name}_physical_behavior.json",
+      "step13/architecture/{base_name}_physical_model.json",
+      "step13/physical/*.xl",
+      "step13/_step13_summary.json"
+    ]
+  },
+  "groups": [
+    {
+      "group_id": "multi_agent_current",
+      "label": "Current Multi-Agent Step1-Step13 System",
+      "role": "main_treatment",
+      "agent_topology": "multi_agent",
+      "condition_definition": "current_step1_to_step13_multi_agent_workflow",
+      "execution_mode": "step1_to_step13_current_pipeline",
+      "prompt_policy": "workflow_specific_role_prompts",
+      "tool_access": "current_system_tools",
+      "notes": "Treatment condition used to produce the reported multi-agent aggregate and paired-comparison results."
+    },
+    {
+      "group_id": "single_agent_sequential_oneshot",
+      "label": "Single Agent Sequential One-Shot RFLP Generation",
+      "role": "main_baseline",
+      "agent_topology": "single_agent",
+      "condition_definition": "four_stage_sequential_single_agent_workflow",
+      "execution_mode": "four_sequential_one_shot_model_text_generations",
+      "prompt_file": "prompts/single_agent_sequential_oneshot_prompt.md",
+      "tool_access": "none_during_generation_validation_after_generation_only",
+      "notes": "One single agent role generates requirement, use-case, logical XLanguage, and physical XLanguage model texts in four sequential calls. Each call receives syntax explanation plus a one-shot example and all upstream generated models. Validation errors are not fed back for repair."
+    }
+  ]
+}

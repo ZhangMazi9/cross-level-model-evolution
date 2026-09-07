@@ -1,0 +1,835 @@
+﻿{
+  "package_name": "MainLandingGearDropTest",
+  "components": [
+    {
+      "name": "PhysicalScenarioClock",
+      "kind": "continuous",
+      "description": "Master physical timing controller that broadcasts physical scenario time triggers.",
+      "parameters": [],
+      "values": [
+        {
+          "name": "physical_event_marker_clock",
+          "data_type": "real",
+          "initial": 0.0,
+          "dimensions": null,
+          "description": "Continuous time state"
+        }
+      ],
+      "ports": [
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "simulation_time",
+          "description": "Current simulation time"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "PHYS_EVT_DESCENT_START",
+          "description": "Permanent step marker for descent start"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "PHYS_EVT_TOUCHDOWN",
+          "description": "Permanent step marker for touchdown"
+        }
+      ],
+      "initial_equations": [
+        "physical_event_marker_clock = 0.0"
+      ],
+      "equations": [
+        "der(physical_event_marker_clock) = 1.0",
+        "simulation_time = physical_event_marker_clock",
+        "PHYS_EVT_DESCENT_START = (0.5 + 0.5 * ((time - 0) / (abs(time - 0) + 0.001))) - (0.5 + 0.5 * ((time - 0.5) / (abs(time - 0.5) + 0.001)))",
+        "PHYS_EVT_TOUCHDOWN = (0.5 + 0.5 * ((time - 0.23) / (abs(time - 0.23) + 0.001))) - (0.5 + 0.5 * ((time - 0.73) / (abs(time - 0.73) + 0.001)))"
+      ],
+      "actions": []
+    },
+    {
+      "name": "PhysicalScenarioPhaseTracker",
+      "kind": "block",
+      "description": "Tracks and broadcasts scenario phase events to domain subsystems.",
+      "parameters": [],
+      "values": [],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "simulation_time",
+          "description": "Current simulation time"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "in_PHYS_EVT_DESCENT_START",
+          "description": "Input descent start marker"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "in_PHYS_EVT_TOUCHDOWN",
+          "description": "Input touchdown marker"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "PHYS_EVT_DESCENT_START",
+          "description": "Output descent start marker"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "PHYS_EVT_TOUCHDOWN",
+          "description": "Output touchdown marker"
+        }
+      ],
+      "initial_equations": [],
+      "equations": [],
+      "actions": [
+        "PHYS_EVT_DESCENT_START = in_PHYS_EVT_DESCENT_START",
+        "PHYS_EVT_TOUCHDOWN = in_PHYS_EVT_TOUCHDOWN"
+      ]
+    },
+    {
+      "name": "ReleaseFixtureActuator",
+      "kind": "block",
+      "description": "Physical driver that drops the release force to zero to initiate free-fall.",
+      "parameters": [
+        {
+          "name": "initial_support_force",
+          "data_type": "real",
+          "value": 9810.0,
+          "dimensions": null,
+          "description": "Force required to hold the equivalent airframe mass in static equilibrium"
+        }
+      ],
+      "values": [],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "PHYS_EVT_DESCENT_START",
+          "description": "Descent start event marker"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "release_force",
+          "description": "Vertical support force applied to the airframe mass"
+        }
+      ],
+      "initial_equations": [],
+      "equations": [],
+      "actions": [
+        "release_force = initial_support_force * (1.0 - PHYS_EVT_DESCENT_START)"
+      ]
+    },
+    {
+      "name": "GroundConstraintEnforcer",
+      "kind": "block",
+      "description": "Boundary actuator that activates the ground height constraint at touchdown.",
+      "parameters": [
+        {
+          "name": "runway_elevation",
+          "data_type": "real",
+          "value": 0.0,
+          "dimensions": null,
+          "description": "Vertical position of the runway surface"
+        }
+      ],
+      "values": [],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "PHYS_EVT_TOUCHDOWN",
+          "description": "Touchdown event marker"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "ground_height",
+          "description": "Vertical position of the runway surface constraint"
+        }
+      ],
+      "initial_equations": [],
+      "equations": [],
+      "actions": [
+        "ground_height = -1000.0 * (1.0 - PHYS_EVT_TOUCHDOWN) + runway_elevation * PHYS_EVT_TOUCHDOWN"
+      ]
+    },
+    {
+      "name": "AirframeMassDynamics",
+      "kind": "continuous",
+      "description": "Models the vertical inertial response of the supported airframe mass.",
+      "parameters": [
+        {
+          "name": "M_s",
+          "data_type": "real",
+          "value": 1000.0,
+          "dimensions": null,
+          "description": "Equivalent airframe mass"
+        },
+        {
+          "name": "g",
+          "data_type": "real",
+          "value": 9.81,
+          "dimensions": null,
+          "description": "Gravitational acceleration"
+        }
+      ],
+      "values": [
+        {
+          "name": "v_s_state",
+          "data_type": "real",
+          "initial": 0.0,
+          "dimensions": null,
+          "description": "Auto-injected internal dynamic state for output port v_s."
+        },
+        {
+          "name": "y_s_state",
+          "data_type": "real",
+          "initial": 0.0,
+          "dimensions": null,
+          "description": "Auto-injected internal dynamic state for output port y_s."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "release_force",
+          "description": "Vertical support force"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "strut_force",
+          "description": "Reaction force from the shock strut"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "y_s",
+          "description": "Vertical displacement of the equivalent airframe mass"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "v_s",
+          "description": "Vertical velocity of the equivalent airframe mass"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "piston_zdd_out",
+          "description": "Vertical acceleration of the equivalent airframe mass"
+        }
+      ],
+      "initial_equations": [
+        "y_s = 0.0",
+        "v_s = 0.0",
+        "v_s_state = 0.0",
+        "y_s_state = 0.0"
+      ],
+      "equations": [
+        "der(y_s_state) = v_s",
+        "der(v_s_state) = piston_zdd_out",
+        "piston_zdd_out = (release_force + strut_force - M_s * g) / M_s",
+        "v_s = v_s_state",
+        "y_s = y_s_state"
+      ],
+      "actions": []
+    },
+    {
+      "name": "TireContactDynamics",
+      "kind": "continuous",
+      "description": "Models the unsprung mass dynamics and pneumatic tire deflection upon ground contact.",
+      "parameters": [
+        {
+          "name": "M_u",
+          "data_type": "real",
+          "value": 300.0,
+          "dimensions": null,
+          "description": "Unsprung wheel mass"
+        },
+        {
+          "name": "K_t",
+          "data_type": "real",
+          "value": 1700000.0,
+          "dimensions": null,
+          "description": "Tire stiffness approximation"
+        },
+        {
+          "name": "g",
+          "data_type": "real",
+          "value": 9.81,
+          "dimensions": null,
+          "description": "Gravitational acceleration"
+        }
+      ],
+      "values": [
+        {
+          "name": "penetration",
+          "data_type": "real",
+          "initial": 0.0,
+          "dimensions": null,
+          "description": "Intermediate variable for ground penetration"
+        },
+        {
+          "name": "v_u_state",
+          "data_type": "real",
+          "initial": 0.0,
+          "dimensions": null,
+          "description": "Auto-injected internal dynamic state for output port v_u."
+        },
+        {
+          "name": "y_u_state",
+          "data_type": "real",
+          "initial": 0.0,
+          "dimensions": null,
+          "description": "Auto-injected internal dynamic state for output port y_u."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "y_s",
+          "description": "Airframe vertical displacement"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "ground_height",
+          "description": "Runway surface vertical position"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "strut_force",
+          "description": "Reaction force from the shock strut"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "y_u",
+          "description": "Vertical displacement of the unsprung wheel mass"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "v_u",
+          "description": "Vertical velocity of the unsprung wheel mass"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "tire_deflection",
+          "description": "Compression of the tire carcass"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "tire_force",
+          "description": "Vertical reaction force generated by the tire"
+        }
+      ],
+      "initial_equations": [
+        "y_u = 0.0",
+        "v_u = 0.0",
+        "penetration = 0.0",
+        "v_u_state = 0.0",
+        "y_u_state = 0.0"
+      ],
+      "equations": [
+        "der(y_u_state) = v_u",
+        "der(v_u_state) = (tire_force - strut_force - M_u * g) / M_u",
+        "penetration = ground_height - y_u",
+        "tire_deflection = 0.5 * (penetration + abs(penetration))",
+        "tire_force = K_t * tire_deflection",
+        "v_u = v_u_state",
+        "y_u = y_u_state"
+      ],
+      "actions": []
+    },
+    {
+      "name": "OleoGasSpringDynamics",
+      "kind": "continuous",
+      "description": "Models the pneumatic spring force and relative stroke of the shock strut.",
+      "parameters": [
+        {
+          "name": "K_s",
+          "data_type": "real",
+          "value": 100000.0,
+          "dimensions": null,
+          "description": "Gas spring stiffness coefficient"
+        }
+      ],
+      "values": [
+        {
+          "name": "oleo_compression_state",
+          "data_type": "real",
+          "initial": 0.0,
+          "dimensions": null,
+          "description": "Auto-injected internal dynamic state for output port oleo_compression."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "y_s",
+          "description": "Airframe vertical displacement"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "y_u",
+          "description": "Wheel vertical displacement"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "v_s",
+          "description": "Airframe vertical velocity"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "v_u",
+          "description": "Wheel vertical velocity"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "damping_force",
+          "description": "Hydraulic damping force"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "oleo_compression",
+          "description": "Relative displacement of the shock strut sliding joint"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "oleo_compression_speed",
+          "description": "Relative velocity of the shock strut sliding joint"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "strut_force",
+          "description": "Total pneumatic spring and damping force"
+        }
+      ],
+      "initial_equations": [
+        "oleo_compression = 0.0",
+        "oleo_compression_state = 0.0"
+      ],
+      "equations": [
+        "der(oleo_compression_state) = v_u - v_s",
+        "oleo_compression_speed = v_u - v_s",
+        "strut_force = K_s * oleo_compression + damping_force",
+        "oleo_compression = oleo_compression_state"
+      ],
+      "actions": []
+    },
+    {
+      "name": "HydraulicDamperDynamics",
+      "kind": "block",
+      "description": "Models the hydraulic energy dissipation during strut compression and rebound.",
+      "parameters": [
+        {
+          "name": "C_v",
+          "data_type": "real",
+          "value": 153475.1727204978,
+          "dimensions": null,
+          "description": "Linear oleo damping coefficient"
+        },
+        {
+          "name": "C_v2",
+          "data_type": "real",
+          "value": 1.9602485837391784,
+          "dimensions": null,
+          "description": "Quadratic oleo damping coefficient"
+        }
+      ],
+      "values": [],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "oleo_compression_speed",
+          "description": "Relative velocity of the shock strut"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "damping_force",
+          "description": "Force generated by hydraulic fluid displacement"
+        }
+      ],
+      "initial_equations": [],
+      "equations": [],
+      "actions": [
+        "damping_force = C_v * oleo_compression_speed + C_v2 * oleo_compression_speed * abs(oleo_compression_speed)"
+      ]
+    },
+    {
+      "name": "SensorAndTelemetrySystem",
+      "kind": "block",
+      "description": "Captures and streams physical state variables for continuous monitoring and data logging.",
+      "parameters": [],
+      "values": [],
+      "ports": [
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "y_s",
+          "description": "Airframe vertical displacement"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "y_u",
+          "description": "Wheel vertical displacement"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "v_s",
+          "description": "Airframe vertical velocity"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "v_u",
+          "description": "Wheel vertical velocity"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "piston_zdd_out",
+          "description": "Airframe vertical acceleration"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "tire_deflection",
+          "description": "Tire compression"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "oleo_compression",
+          "description": "Strut stroke"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "damping_force",
+          "description": "Damping force"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "PHYS_EVT_DESCENT_START",
+          "description": "Descent start event marker"
+        },
+        {
+          "direction": "input",
+          "data_type": "real",
+          "name": "PHYS_EVT_TOUCHDOWN",
+          "description": "Touchdown event marker"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_y_s",
+          "description": "Measured airframe displacement"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_y_u",
+          "description": "Measured wheel displacement"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_v_s",
+          "description": "Measured airframe velocity"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_v_u",
+          "description": "Measured wheel velocity"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_piston_zdd_out",
+          "description": "Measured airframe acceleration"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_tire_deflection",
+          "description": "Measured tire compression"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_oleo_compression",
+          "description": "Measured strut stroke"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "measured_damping_force",
+          "description": "Measured damping force"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "out_PHYS_EVT_DESCENT_START",
+          "description": "Output descent start marker"
+        },
+        {
+          "direction": "output",
+          "data_type": "real",
+          "name": "out_PHYS_EVT_TOUCHDOWN",
+          "description": "Output touchdown marker"
+        }
+      ],
+      "initial_equations": [],
+      "equations": [],
+      "actions": [
+        "measured_y_s = y_s",
+        "measured_y_u = y_u",
+        "measured_v_s = v_s",
+        "measured_v_u = v_u",
+        "measured_piston_zdd_out = piston_zdd_out",
+        "measured_tire_deflection = tire_deflection",
+        "measured_oleo_compression = oleo_compression",
+        "measured_damping_force = damping_force",
+        "out_PHYS_EVT_DESCENT_START = PHYS_EVT_DESCENT_START",
+        "out_PHYS_EVT_TOUCHDOWN = PHYS_EVT_TOUCHDOWN"
+      ]
+    }
+  ],
+  "couple": {
+    "name": "MLGDropTestCouple",
+    "parts": [
+      {
+        "component": "PhysicalScenarioClock",
+        "instance": "clock_inst"
+      },
+      {
+        "component": "PhysicalScenarioPhaseTracker",
+        "instance": "scenario_clock_inst"
+      },
+      {
+        "component": "ReleaseFixtureActuator",
+        "instance": "release_fixture_inst"
+      },
+      {
+        "component": "GroundConstraintEnforcer",
+        "instance": "ground_constraint_inst"
+      },
+      {
+        "component": "AirframeMassDynamics",
+        "instance": "airframe_mass_inst"
+      },
+      {
+        "component": "TireContactDynamics",
+        "instance": "tire_contact_inst"
+      },
+      {
+        "component": "OleoGasSpringDynamics",
+        "instance": "oleo_strut_inst"
+      },
+      {
+        "component": "HydraulicDamperDynamics",
+        "instance": "hydraulic_damper_inst"
+      },
+      {
+        "component": "SensorAndTelemetrySystem",
+        "instance": "telemetry_inst"
+      }
+    ],
+    "connections": [
+      {
+        "from_instance": "clock_inst",
+        "from_port": "simulation_time",
+        "to_instance": "scenario_clock_inst",
+        "to_port": "simulation_time"
+      },
+      {
+        "from_instance": "clock_inst",
+        "from_port": "PHYS_EVT_DESCENT_START",
+        "to_instance": "scenario_clock_inst",
+        "to_port": "in_PHYS_EVT_DESCENT_START"
+      },
+      {
+        "from_instance": "clock_inst",
+        "from_port": "PHYS_EVT_TOUCHDOWN",
+        "to_instance": "scenario_clock_inst",
+        "to_port": "in_PHYS_EVT_TOUCHDOWN"
+      },
+      {
+        "from_instance": "scenario_clock_inst",
+        "from_port": "PHYS_EVT_DESCENT_START",
+        "to_instance": "release_fixture_inst",
+        "to_port": "PHYS_EVT_DESCENT_START"
+      },
+      {
+        "from_instance": "scenario_clock_inst",
+        "from_port": "PHYS_EVT_TOUCHDOWN",
+        "to_instance": "ground_constraint_inst",
+        "to_port": "PHYS_EVT_TOUCHDOWN"
+      },
+      {
+        "from_instance": "release_fixture_inst",
+        "from_port": "release_force",
+        "to_instance": "airframe_mass_inst",
+        "to_port": "release_force"
+      },
+      {
+        "from_instance": "ground_constraint_inst",
+        "from_port": "ground_height",
+        "to_instance": "tire_contact_inst",
+        "to_port": "ground_height"
+      },
+      {
+        "from_instance": "airframe_mass_inst",
+        "from_port": "y_s",
+        "to_instance": "tire_contact_inst",
+        "to_port": "y_s"
+      },
+      {
+        "from_instance": "airframe_mass_inst",
+        "from_port": "y_s",
+        "to_instance": "oleo_strut_inst",
+        "to_port": "y_s"
+      },
+      {
+        "from_instance": "airframe_mass_inst",
+        "from_port": "v_s",
+        "to_instance": "oleo_strut_inst",
+        "to_port": "v_s"
+      },
+      {
+        "from_instance": "tire_contact_inst",
+        "from_port": "y_u",
+        "to_instance": "oleo_strut_inst",
+        "to_port": "y_u"
+      },
+      {
+        "from_instance": "tire_contact_inst",
+        "from_port": "v_u",
+        "to_instance": "oleo_strut_inst",
+        "to_port": "v_u"
+      },
+      {
+        "from_instance": "oleo_strut_inst",
+        "from_port": "oleo_compression_speed",
+        "to_instance": "hydraulic_damper_inst",
+        "to_port": "oleo_compression_speed"
+      },
+      {
+        "from_instance": "hydraulic_damper_inst",
+        "from_port": "damping_force",
+        "to_instance": "oleo_strut_inst",
+        "to_port": "damping_force"
+      },
+      {
+        "from_instance": "oleo_strut_inst",
+        "from_port": "strut_force",
+        "to_instance": "airframe_mass_inst",
+        "to_port": "strut_force"
+      },
+      {
+        "from_instance": "oleo_strut_inst",
+        "from_port": "strut_force",
+        "to_instance": "tire_contact_inst",
+        "to_port": "strut_force"
+      },
+      {
+        "from_instance": "airframe_mass_inst",
+        "from_port": "y_s",
+        "to_instance": "telemetry_inst",
+        "to_port": "y_s"
+      },
+      {
+        "from_instance": "tire_contact_inst",
+        "from_port": "y_u",
+        "to_instance": "telemetry_inst",
+        "to_port": "y_u"
+      },
+      {
+        "from_instance": "airframe_mass_inst",
+        "from_port": "v_s",
+        "to_instance": "telemetry_inst",
+        "to_port": "v_s"
+      },
+      {
+        "from_instance": "tire_contact_inst",
+        "from_port": "v_u",
+        "to_instance": "telemetry_inst",
+        "to_port": "v_u"
+      },
+      {
+        "from_instance": "airframe_mass_inst",
+        "from_port": "piston_zdd_out",
+        "to_instance": "telemetry_inst",
+        "to_port": "piston_zdd_out"
+      },
+      {
+        "from_instance": "tire_contact_inst",
+        "from_port": "tire_deflection",
+        "to_instance": "telemetry_inst",
+        "to_port": "tire_deflection"
+      },
+      {
+        "from_instance": "oleo_strut_inst",
+        "from_port": "oleo_compression",
+        "to_instance": "telemetry_inst",
+        "to_port": "oleo_compression"
+      },
+      {
+        "from_instance": "hydraulic_damper_inst",
+        "from_port": "damping_force",
+        "to_instance": "telemetry_inst",
+        "to_port": "damping_force"
+      },
+      {
+        "from_instance": "scenario_clock_inst",
+        "from_port": "PHYS_EVT_DESCENT_START",
+        "to_instance": "telemetry_inst",
+        "to_port": "PHYS_EVT_DESCENT_START"
+      },
+      {
+        "from_instance": "scenario_clock_inst",
+        "from_port": "PHYS_EVT_TOUCHDOWN",
+        "to_instance": "telemetry_inst",
+        "to_port": "PHYS_EVT_TOUCHDOWN"
+      }
+    ]
+  },
+  "pruning": {
+    "instance_name": "sys",
+    "couple_name": "MLGDropTestCouple"
+  },
+  "simulation": {
+    "model_name": null,
+    "run_instance": "sys",
+    "stop_time": 5.23,
+    "solver_options": {}
+  }
+}

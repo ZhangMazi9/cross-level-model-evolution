@@ -1,0 +1,112 @@
+{
+  "usecase_name": "main_landing_gear",
+  "actors": [
+    {
+      "name": "aircraft"
+    },
+    {
+      "name": "runway_contact_environment"
+    },
+    {
+      "name": "maintainer"
+    }
+  ],
+  "system": "main_landing_gear",
+  "usecases": [
+    {
+      "name": "withstand_vertical_landing_impact"
+    },
+    {
+      "name": "provide_vertical_support"
+    },
+    {
+      "name": "maintain_runway_contact_support"
+    },
+    {
+      "name": "transfer_vertical_landing_load"
+    },
+    {
+      "name": "absorb_vertical_impact_energy"
+    },
+    {
+      "name": "dissipate_impact_energy"
+    },
+    {
+      "name": "control_rebound_response"
+    },
+    {
+      "name": "recover_stable_support_state"
+    },
+    {
+      "name": "permit_inspection_and_maintenance"
+    },
+    {
+      "name": "inspect_buffering_performance_degradation"
+    },
+    {
+      "name": "support_wear_item_servicing"
+    }
+  ],
+  "correlations": [
+    {
+      "type": "interact",
+      "source": "aircraft",
+      "target": "withstand_vertical_landing_impact"
+    },
+    {
+      "type": "interact",
+      "source": "runway_contact_environment",
+      "target": "withstand_vertical_landing_impact"
+    },
+    {
+      "type": "interact",
+      "source": "maintainer",
+      "target": "permit_inspection_and_maintenance"
+    },
+    {
+      "type": "include",
+      "source": "withstand_vertical_landing_impact",
+      "target": "provide_vertical_support"
+    },
+    {
+      "type": "include",
+      "source": "withstand_vertical_landing_impact",
+      "target": "maintain_runway_contact_support"
+    },
+    {
+      "type": "include",
+      "source": "withstand_vertical_landing_impact",
+      "target": "transfer_vertical_landing_load"
+    },
+    {
+      "type": "include",
+      "source": "withstand_vertical_landing_impact",
+      "target": "absorb_vertical_impact_energy"
+    },
+    {
+      "type": "include",
+      "source": "withstand_vertical_landing_impact",
+      "target": "dissipate_impact_energy"
+    },
+    {
+      "type": "include",
+      "source": "withstand_vertical_landing_impact",
+      "target": "control_rebound_response"
+    },
+    {
+      "type": "include",
+      "source": "withstand_vertical_landing_impact",
+      "target": "recover_stable_support_state"
+    },
+    {
+      "type": "include",
+      "source": "permit_inspection_and_maintenance",
+      "target": "inspect_buffering_performance_degradation"
+    },
+    {
+      "type": "include",
+      "source": "permit_inspection_and_maintenance",
+      "target": "support_wear_item_servicing"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+﻿Task: Generate the landing-gear drop-response optimization model using the current concept physical model and the requirement-derived acceleration constraint.
+
+Physical model:
+- ../01_rflp_final_models/physical_model/LandingGearReduced.xl
+- Use the current RFLP mainline physical model.
+
+Optimizer:
+- UniXDE
+
+Algorithm:
+- NSGA2
+
+Design variables:
+1. EquivalentAirframeWheelMassAssembly.wheel_mass
+   Initial: 300.0
+   Bounds: [240.0, 430.0]
+   Unit: kg
+2. MainGearTireWheelAssembly.tire_stiffness
+   Initial: 1700000.0
+   Bounds: [1300000.0, 2000000.0]
+   Unit: N/m
+3. HydraulicDampingChannel.linear_damping_coeff
+   Initial: 153475.1727204978
+   Bounds: [102316.7818136652, 204633.5636273304]
+   Unit: N/(m/s)
+4. HydraulicDampingChannel.quadratic_damping_gain
+   Initial: 1.9602485837391784
+   Bounds: [0.9801242918695892, 31.363977339826854]
+   Unit: N/(m/s)^2
+
+Objectives:
+1. Minimize maximum positive acceleration during the drop process.
+   Metric: max_positive_acceleration = max(piston_zdd_out)
+2. Minimize maximum negative acceleration peak during the drop process.
+   Metric: max_negative_acceleration_peak = abs(min(piston_zdd_out))
+
+Required signal:
+- OleoPistonRod.piston_zdd_out
+
+Constraint:
+1. Limit maximum positive acceleration during the drop process.
+   Binding: LandingGearAccelerationMetrics.max_positive_acceleration
+   Limit: max_positive_acceleration <= 20.0 m/s^2
+   Source requirement: MLG-REQ-010A
+

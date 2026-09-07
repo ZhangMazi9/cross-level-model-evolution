@@ -1,0 +1,234 @@
+﻿{
+    "package_name":  "LandingGearReduced",
+    "components":  [
+                       {
+                           "name":  "MainGearTireWheelAssembly",
+                           "kind":  "continuous",
+                           "description":  "Main landing gear tire and wheel assembly. The tire_stiffness parameter defines the linear vertical tire stiffness.",
+                           "parameters":  [
+                                              {
+                                                  "name":  "tire_stiffness",
+                                                  "data_type":  "real",
+                                                  "value":  1700000.0,
+                                                  "unit":  "N/m",
+                                                  "lower_bound":  1300000.0,
+                                                  "upper_bound":  2000000.0,
+                                                  "description":  "Optimization variable corresponding directly to original CAE Tire Stiffness Aproximation dimension2."
+                                              }
+                                          ],
+                           "values":  [
+
+                                      ],
+                           "ports":  [
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "tire_force",
+                                             "description":  "Vertical tire contact force."
+                                         },
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "tire_deflection",
+                                             "description":  "Tire vertical deflection."
+                                         }
+                                     ]
+                       },
+                       {
+                           "name":  "HydraulicDampingChannel",
+                           "kind":  "continuous",
+                           "description":  "Oleo hydraulic damping channel with linear and quadratic damping terms.",
+                           "parameters":  [
+                                              {
+                                                  "name":  "linear_damping_coeff",
+                                                  "data_type":  "real",
+                                                  "value":  153475.1727204978,
+                                                  "unit":  "N/(m/s)",
+                                                  "lower_bound":  102316.7818136652,
+                                                  "upper_bound":  204633.5636273304,
+                                                  "description":  "Optimization variable corresponding to the original oleo linear damping coefficient."
+                                              },
+                                              {
+                                                  "name":  "quadratic_damping_gain",
+                                                  "data_type":  "real",
+                                                  "value":  1.9602485837391784,
+                                                  "unit":  "N/(m/s)^2",
+                                                  "lower_bound":  0.9801242918695892,
+                                                  "upper_bound":  31.363977339826853,
+                                                  "description":  "Optimization variable corresponding to the original oleo V^2 damping coefficient."
+                                              }
+                                          ],
+                           "values":  [
+
+                                      ],
+                           "ports":  [
+                                         {
+                                             "direction":  "input",
+                                             "data_type":  "real",
+                                             "name":  "oleo_compression_speed",
+                                             "description":  "Oleo compression speed."
+                                         },
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "damping_force",
+                                             "description":  "Hydraulic damping force."
+                                         }
+                                     ]
+                       },
+                       {
+                           "name":  "EquivalentAirframeWheelMassAssembly",
+                           "kind":  "continuous",
+                           "description":  "Equivalent two-degree-of-freedom vertical dynamics for airframe and wheel-end masses.",
+                           "parameters":  [
+                                              {
+                                                  "name":  "wheel_mass",
+                                                  "data_type":  "real",
+                                                  "value":  300.0,
+                                                  "unit":  "kg",
+                                                  "lower_bound":  240.0,
+                                                  "upper_bound":  430.0,
+                                                  "description":  "Optimization variable corresponding to original MLG wheel mass."
+                                              },
+                                              {
+                                                  "name":  "sprung_mass",
+                                                  "data_type":  "real",
+                                                  "value":  6925.5,
+                                                  "unit":  "kg",
+                                                  "description":  "Fixed sprung mass."
+                                              }
+                                          ],
+                           "values":  [
+                                          {
+                                              "name":  "y_s",
+                                              "data_type":  "real",
+                                              "description":  "Sprung mass vertical displacement."
+                                          },
+                                          {
+                                              "name":  "y_u",
+                                              "data_type":  "real",
+                                              "description":  "Wheel-end vertical displacement."
+                                          },
+                                          {
+                                              "name":  "a_s",
+                                              "data_type":  "real",
+                                              "description":  "Sprung mass vertical acceleration."
+                                          },
+                                          {
+                                              "name":  "a_u",
+                                              "data_type":  "real",
+                                              "description":  "Wheel-end vertical acceleration."
+                                          }
+                                      ],
+                           "ports":  [
+                                         {
+                                             "direction":  "input",
+                                             "data_type":  "real",
+                                             "name":  "tire_force",
+                                             "description":  "Tire force."
+                                         },
+                                         {
+                                             "direction":  "input",
+                                             "data_type":  "real",
+                                             "name":  "oleo_force",
+                                             "description":  "Oleo strut force."
+                                         },
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "a_s_out",
+                                             "description":  "Sprung mass acceleration output."
+                                         },
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "a_u_out",
+                                             "description":  "Wheel-end acceleration output."
+                                         }
+                                     ]
+                       },
+                       {
+                           "name":  "OleoPistonRod",
+                           "kind":  "continuous",
+                           "description":  "Observation mapping for piston vertical acceleration.",
+                           "parameters":  [
+
+                                          ],
+                           "values":  [
+
+                                      ],
+                           "ports":  [
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "piston_zdd_out",
+                                             "description":  "Time history of vertical acceleration during the drop test."
+                                         }
+                                     ]
+                       },
+                       {
+                           "name":  "LandingGearAccelerationMetrics",
+                           "kind":  "postprocess",
+                           "description":  "Post-processing metrics computed from OleoPistonRod.piston_zdd_out over the drop process.",
+                           "parameters":  [
+
+                                          ],
+                           "values":  [
+
+                                      ],
+                           "ports":  [
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "max_positive_acceleration",
+                                             "description":  "Maximum positive value of piston_zdd_out during the drop process. This metric is constrained by MLG-REQ-010A to remain below 20.0 m/s^2."
+                                         },
+                                         {
+                                             "direction":  "output",
+                                             "data_type":  "real",
+                                             "name":  "max_negative_acceleration_peak",
+                                             "description":  "Absolute value of the most negative piston_zdd_out during the drop process."
+                                         }
+                                     ]
+                       }
+                   ],
+    "couple":  {
+                   "name":  "LandingGearSystem",
+                   "parts":  [
+                                 {
+                                     "component":  "MainGearTireWheelAssembly",
+                                     "instance":  "tireWheel"
+                                 },
+                                 {
+                                     "component":  "HydraulicDampingChannel",
+                                     "instance":  "dampingChannel"
+                                 },
+                                 {
+                                     "component":  "EquivalentAirframeWheelMassAssembly",
+                                     "instance":  "equivalentMasses"
+                                 },
+                                 {
+                                     "component":  "OleoPistonRod",
+                                     "instance":  "pistonRod"
+                                 },
+                                 {
+                                     "component":  "LandingGearAccelerationMetrics",
+                                     "instance":  "accelerationMetrics"
+                                 }
+                             ],
+                   "connections":  [
+
+                                   ]
+               },
+    "simulation":  {
+                       "model_name":  "LandingGearSystem",
+                       "run_instance":  "sys",
+                       "stop_time":  5.0,
+                       "solver_options":  {
+                                              "sample_step_s":  0.001
+                                          }
+                   },
+    "source_files":  [
+                         "01_rflp_final_models/physical_model/LandingGearReduced.xl"
+                     ]
+}

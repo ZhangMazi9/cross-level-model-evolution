@@ -1,0 +1,89 @@
+{
+  "schema_version": "step9_logic_json_ir_ablation.v1",
+  "project": "json_ir_ablation_experiment",
+  "scope": "logical_model_step9_only",
+  "task_set": "tasks/rflp_logic_step9_ablation_tasks.jsonl",
+  "shared_upstream_source": "section_4_4_system_level_comparison_complete_step1_8_artifacts",
+  "configuration_role": "public_experiment_condition_record",
+  "common_controls": {
+    "base_model_env": "XLANG_MODEL",
+    "default_model": "qwen3.7-plus",
+    "temperature": 0,
+    "memory_policy": "disabled_by_default",
+    "manual_intervention_policy": "none_during_run",
+    "shared_artifact_root_template": "runs/{run_id}/_shared/{task_id}",
+    "group_output_root_template": "runs/{run_id}/{group_id}/{task_id}",
+    "shared_upstream_artifacts": [
+      "stage1_8/requirement/{base_name}_needs.txt",
+      "stage1_8/requirement/{base_name}_context.txt",
+      "stage1_8/usecase/{base_name}_usecase.json",
+      "stage1_8/usecase/{base_name}_usecase.xl",
+      "stage1_8/analysis/{base_name}_functions.txt",
+      "stage1_8/analysis/{base_name}_subsystems.txt",
+      "stage1_8/requirement/{base_name}_req.json",
+      "stage1_8/requirement/{base_name}_req.xl",
+      "stage1_8/architecture/{base_name}_architecture.txt",
+      "stage1_8/architecture/{base_name}_behavior.txt"
+    ],
+    "disabled_for_all_groups": [
+      "physical_model_steps_10_to_13",
+      "compiler_feedback_to_generation",
+      "csv_feedback_repair",
+      "llm_semantic_review",
+      "scenario_timeline_source_injection",
+      "scenario_event_marker_recorder_injection",
+      "xcom_based_repair_loop"
+    ],
+    "evaluation_metrics": {
+      "primary": "compiler_pass",
+      "primary_definition": "The generated Step9 logical XLanguage model passes the XLanguage compiler/build check in a final one-shot evaluation.",
+      "compiler_feedback_policy": "Compiler diagnostics are never fed back to the model and never trigger repair.",
+      "gate_feedback_policy": "For gated groups only, Schema/static/semantic gate diagnostics may be fed back to the same generation mode for bounded rework before final compiler evaluation.",
+      "secondary": [
+        "artifact_present",
+        "syntax_pass",
+        "static_gate_pass",
+        "generation_failed",
+        "gate_repair_attempts"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "group_id": "json_ir_guarded",
+      "label": "JSON IR with matched static gates",
+      "generation_representation": "SystemModel JSON IR",
+      "uses_json_ir": true,
+      "uses_static_gate": true,
+      "gate_policy": "schema_check_low_risk_normalization_semantic_rule_gate_with_bounded_llm_rework",
+      "notes": "Step9-style JSON IR condition using Schema checks, low-risk normalization, a semantic rule gate, and bounded gate-guided rework before final evaluation."
+    },
+    {
+      "group_id": "json_ir_ungated",
+      "label": "JSON IR without explicit gates",
+      "generation_representation": "SystemModel JSON IR",
+      "uses_json_ir": true,
+      "uses_static_gate": false,
+      "gate_policy": "no_explicit_schema_normalization_or_semantic_gate_before_codegen",
+      "notes": "Generates SystemModel JSON IR and sends it directly to minimal deterministic code generation. If malformed JSON/structure makes code generation fail, the sample is counted as failed."
+    },
+    {
+      "group_id": "direct_xl_static_gate",
+      "label": "Direct XLanguage with matched static/semantic gate",
+      "generation_representation": "direct logical XLanguage",
+      "uses_json_ir": false,
+      "uses_static_gate": true,
+      "gate_policy": "xlanguage_static_and_matched_semantic_gate_with_bounded_llm_rework_not_stronger_than_json_ir_semantic_gate",
+      "notes": "Directly generates logical XLanguage, then applies a static XLanguage gate plus matched structural-semantic checks with strength no greater than the original JSON IR gate. Checks cover declared ports/states/symbols, transition targets, connection direction/type, and timeout-driven output source. Failed gate diagnostics can guide bounded direct-XLanguage rework. No XCom compile/run feedback is used for repair."
+    },
+    {
+      "group_id": "direct_xl_ungated",
+      "label": "Direct XLanguage without gates",
+      "generation_representation": "direct logical XLanguage",
+      "uses_json_ir": false,
+      "uses_static_gate": false,
+      "gate_policy": "none_before_final_syntax_and_artifact_evaluation",
+      "notes": "Directly generates logical XLanguage. No intermediate gate is applied before final artifact evaluation."
+    }
+  ]
+}

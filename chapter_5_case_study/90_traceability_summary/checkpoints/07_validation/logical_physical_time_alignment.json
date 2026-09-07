@@ -1,0 +1,182 @@
+﻿{
+    "validation_time":  "2026-07-18",
+    "model_dir":  "../04_logical_architecture",
+    "xcom_compile":  "pass",
+    "simulation_run":  "pass",
+    "simulation_finished_time_s":  5,
+    "external_event_count":  2,
+    "external_events":  [
+                            {
+                                "event":  "LOGIC_EVT_DESCENT_START",
+                                "time_s":  0,
+                                "meaning":  "aircraft begins descent / release starts"
+                            },
+                            {
+                                "event":  "LOGIC_EVT_TOUCHDOWN",
+                                "time_s":  0.23,
+                                "meaning":  "wheel-ground touchdown / contact response starts"
+                            }
+                        ],
+    "physical_touchdown_evidence":  {
+                                        "physical_model":  "01_rflp_final_models/physical_model/LandingGearReduced.xl",
+                                        "contact_condition":  "tireWheel_raw_deflection = ground_height + tire_radius - y_u \u003e 0",
+                                        "previous_sample_time_s":  0.22,
+                                        "previous_raw_deflection":  -0.0136582,
+                                        "first_positive_sample_time_s":  0.23,
+                                        "first_positive_raw_deflection":  1E-06,
+                                        "linear_zero_crossing_time_s":  0.229999267892702,
+                                        "adopted_logical_touchdown_time_s":  0.23,
+                                        "generated_csv_packaged":  false,
+                                        "packaging_note":  "The scalar touchdown evidence and representative logical-state CSV traces are provided in this validation checkpoint."
+                                    },
+    "stop_time_s":  5,
+    "stop_time_role":  "simulation horizon only; not an external event",
+    "csv_time_points_s":  [
+                              0,
+                              0.23,
+                              5
+                          ],
+    "csv_summary":  [
+                        {
+                            "file":  "sys_accelerationObservationLogic.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:ObservationIdle",
+                                                "0:BaselineAccelerationRecording",
+                                                "0.23:ImpactAccelerationMonitoring",
+                                                "5:AccelerationObservationComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_airframeEquivalentMassLogic.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:SupportedInitialCondition",
+                                                "0:ReleasedDescent",
+                                                "0.23:ImpactLoadTransfer",
+                                                "5:AirframeResponseObservationComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_dropTestScenarioTimeline.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:PreScenario",
+                                                "0:DescentScenarioActive",
+                                                "0.23:TouchdownScenarioActiveEntry",
+                                                "5:ScenarioHorizonComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_groundContactBoundaryLogic.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:GroundReferenceDefined",
+                                                "0:ClearanceBoundaryMonitoring",
+                                                "0.23:ContactConstraintActive",
+                                                "5:GroundContactObservationComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_hydraulicDampingLogic.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:DampingStandby",
+                                                "0:RelativeMotionMonitoring",
+                                                "0.23:DampingActivated",
+                                                "5:DampingObservationComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_oleoPneumaticStrutLogic.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:ExtendedStroke",
+                                                "0:StrokeAvailable",
+                                                "0.23:CompressionStroke",
+                                                "5:StrutResponseObservationComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_releaseFixtureLogic.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:HoldingAircraft",
+                                                "0:Released",
+                                                "0.23:InactiveAfterRelease",
+                                                "5:ReleaseTimelineComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_scenarioEventMarkerRecorder.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:Monitoring",
+                                                "0:Monitoring",
+                                                "0.23:Monitoring",
+                                                "5:Monitoring"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_scenarioTimelineSource.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:BeforeSchedule",
+                                                "0:EvtDescentStart",
+                                                "0.23:EvtTouchdown",
+                                                "5:HorizonComplete"
+                                            ]
+                        },
+                        {
+                            "file":  "sys_tireWheelAssemblyLogic.csv",
+                            "times":  [
+                                          0,
+                                          0.23,
+                                          5
+                                      ],
+                            "state_trace":  [
+                                                "0:AirborneNoContact",
+                                                "0:ClearanceTracking",
+                                                "0.23:ContactEstablished",
+                                                "5:TireContactObservationComplete"
+                                            ]
+                        }
+                    ],
+    "note":  "The only external events are descent start at 0.0 s and touchdown/contact at 0.23 s. The touchdown time was read from the physical model CSV using the tire-ground contact condition. The 5.0 s row is only the simulation StopTime / observation horizon."
+}

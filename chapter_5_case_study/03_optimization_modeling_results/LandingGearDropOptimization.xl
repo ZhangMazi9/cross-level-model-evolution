@@ -1,0 +1,75 @@
+MDO LandingGearDropOptimization
+
+optimizer:
+  UniXDE;
+end;
+
+algorithm:
+  NSGA2;
+end;
+
+part:
+  continuous_variable EquivalentAirframeWheelMassAssembly.wheel_mass
+  variable value:
+    real initial_value = 300.0;
+    real final_value;
+  range:
+    real Max = 430.0;
+    real Min = 240.0;
+  end;
+
+  continuous_variable MainGearTireWheelAssembly.tire_stiffness
+  variable value:
+    real initial_value = 1700000.0;
+    real final_value;
+  range:
+    real Max = 2000000.0;
+    real Min = 1300000.0;
+  end;
+
+  continuous_variable HydraulicDampingChannel.linear_damping_coeff
+  variable value:
+    real initial_value = 153475.1727204978;
+    real final_value;
+  range:
+    real Max = 204633.5636273304;
+    real Min = 102316.7818136652;
+  end;
+
+  continuous_variable HydraulicDampingChannel.quadratic_damping_gain
+  variable value:
+    real initial_value = 1.9602485837391784;
+    real final_value;
+  range:
+    real Max = 31.363977339826854;
+    real Min = 0.9801242918695892;
+  end;
+
+  Ineq_constraint LandingGearAccelerationMetrics.max_positive_acceleration
+  range:
+    real Max = 20.0;
+  scale factor:
+    real sf = 1;
+  weight factor:
+    real wf = 1;
+  end;
+
+  Optimization_objective LandingGearAccelerationMetrics.max_positive_acceleration
+  direction:
+    bool false;
+  scale factor:
+    real sf = 1;
+  weight factor:
+    real wf = 1;
+  end;
+
+  Optimization_objective LandingGearAccelerationMetrics.max_negative_acceleration_peak
+  direction:
+    bool false;
+  scale factor:
+    real sf = 1;
+  weight factor:
+    real wf = 1;
+  end;
+
+end;

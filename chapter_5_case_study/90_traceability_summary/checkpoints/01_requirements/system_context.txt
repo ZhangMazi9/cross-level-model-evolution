@@ -1,0 +1,54 @@
+System name: main_landing_gear
+
+Requirement basis: main landing gear drop-test requirement scope.
+This context file is generated for Step7/Step8 logical architecture and behavior modeling.
+
+System boundary:
+- Inside: wheel and tire assembly, oleo-pneumatic shock strut, gas chamber, hydraulic damping path, seals, structural load path, observation/sensing interfaces for simulation.
+- Outside: aircraft equivalent mass/airframe attachment, runway/ground contact boundary, drop-test scenario source, maintenance and certification stakeholders.
+
+Primary requirement themes:
+- Safe vertical support and shock absorption under specified landing impact/drop-test conditions.
+- Ground contact support and vertical load transfer from tire/wheel through shock strut to aircraft structure.
+- Impact absorption, damping energy dissipation, and controlled rebound.
+- Performance constraints for acceleration, compression stroke, bottoming prevention, and post-impact stability.
+- Design coverage for tire stiffness, oleo-pneumatic compression/extension, gas elastic recovery, hydraulic damping, sealing integrity, and load-path integrity.
+- Environmental and suitability coverage for runway contact, repeated load cycles, inspection, maintenance, wear-item servicing, and degraded but safe capability.
+
+Requirement list:
+- MLG-REQ-000 (req0): The main landing gear shall provide safe vertical support and shock absorption for the aircraft under specified vertical landing impact and drop-test conditions.
+- MLG-REQ-001 (req1): The main landing gear shall satisfy the functional requirements for vertical load support, ground contact support, vertical load transfer, impact absorption, damping energy dissipation, and controlled rebound.
+- MLG-REQ-002 (req2): The main landing gear shall support the aircraft vertical load transmitted through the landing gear attachment structure during specified landing impact conditions.
+- MLG-REQ-003 (req3): The wheel and tire assembly shall provide ground contact support when the main landing gear contacts the runway surface during vertical landing impact.
+- MLG-REQ-004 (req4): The main landing gear shall transfer vertical impact loads from the wheel and tire assembly through the shock strut and structural attachment path to the aircraft structure.
+- MLG-REQ-005 (req5): The main landing gear shall absorb vertical landing impact energy through controlled compression of its shock absorption assembly.
+- MLG-REQ-006 (req6): The main landing gear shall dissipate impact energy during compression and rebound to support a controlled vertical response.
+- MLG-REQ-007 (req7): The main landing gear shall provide controlled rebound after shock strut compression under specified vertical landing impact conditions.
+- MLG-REQ-008 (req8): The main landing gear shall satisfy the non-functional requirements for landing impact performance, physical design, operating environment adaptation, and service suitability.
+- MLG-REQ-009 (req9): The main landing gear shall satisfy the performance requirements for vertical shock acceleration, compression stroke, bottoming prevention, and post-impact stability.
+- MLG-REQ-010 (req10): The main landing gear shall limit the peak vertical shock acceleration transmitted to the supported aircraft structure within the specified limit.
+- MLG-REQ-010A (req29): The main landing gear shall limit the maximum positive peak of the piston rod vertical acceleration time history, max_t(piston_zdd_out(t)), to less than 20 m/s^2 during the drop process.
+- MLG-REQ-011 (req11): The shock strut shall limit maximum compression stroke within the specified limit during vertical landing impact.
+- MLG-REQ-012 (req12): The shock strut shall prevent hard bottoming under specified vertical landing impact conditions.
+- MLG-REQ-013 (req13): The main landing gear shall recover to a stable ground-support state after the vertical impact and rebound response.
+- MLG-REQ-014 (req14): The main landing gear shall satisfy the design requirements for tire vertical buffering, oleo-pneumatic shock absorption, gas elastic recovery, hydraulic damping, sealing integrity, and load-path integrity.
+- MLG-REQ-015 (req15): The tire shall provide vertical stiffness characteristics within the allowed range needed to meet the specified landing impact buffering requirement.
+- MLG-REQ-016 (req16): The oleo-pneumatic shock strut shall provide compression and extension characteristics needed to meet the specified impact absorption and rebound control requirements.
+- MLG-REQ-017 (req17): The gas chamber of the shock strut shall provide elastic restoring force during and after shock strut compression.
+- MLG-REQ-018 (req18): The hydraulic damping path of the shock strut shall provide damping characteristics within the allowed range needed for impact energy dissipation and rebound control.
+- MLG-REQ-019 (req19): The shock strut shall maintain oil and gas sealing integrity required for oleo-pneumatic load support, energy absorption, and elastic recovery.
+- MLG-REQ-020 (req20): The main landing gear connection structure shall maintain the integrity and alignment of the vertical load path from tire contact through the shock strut to the aircraft attachment structure.
+- MLG-REQ-021 (req21): The main landing gear shall satisfy the environmental requirements for specified landing impact, runway contact, and repeated load-cycle conditions.
+- MLG-REQ-022 (req22): The main landing gear shall maintain the required vertical support and shock absorption capability when subjected to the specified vertical landing impact environment.
+- MLG-REQ-023 (req23): The wheel and tire assembly shall maintain stable contact support with the runway surface under the specified runway contact condition.
+- MLG-REQ-024 (req24): The main landing gear structural members, tire, wheel assembly, and shock strut shall withstand the specified repeated vertical load-cycle conditions without loss of required vertical support and shock absorption capability.
+- MLG-REQ-025 (req25): The main landing gear shall satisfy the suitability requirements for inspection, maintenance, wear-item replacement, and minimum safe capability under allowed performance degradation.
+- MLG-REQ-026 (req26): The main landing gear shall allow inspection and maintenance of the tire, wheel assembly, shock strut, hydraulic fluid path, gas chamber, seals, and primary structural joints.
+- MLG-REQ-027 (req27): The main landing gear shall support replacement or servicing of wear-sensitive items associated with tire contact, oleo sealing, and hydraulic damping performance.
+- MLG-REQ-028 (req28): When key buffering components experience performance deviation, wear, or degradation within the allowed range, the main landing gear shall retain the specified minimum safe landing support and buffering capability.
+
+Landing gear case-specific logical modeling constraint for downstream Step7-Step9:
+- The logical model should describe scenario timeline and physical-component logical states, not detailed physical response phases.
+- External logical events are limited to descent start at 0.0 s and touchdown at 0.23 s.
+- Simulation horizon at 5.0 s is an observation/stop time, not an external event.
+- Compression, rebound, damping decay, maximum compression, and stability are physical-derived responses or observations, not new external logical events.

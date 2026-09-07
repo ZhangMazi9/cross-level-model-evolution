@@ -1,0 +1,632 @@
+{
+  "req_name": "main_landing_gear_requirement",
+  "imports": [
+    {
+      "import_type": "usecase",
+      "name": "main_landing_gear_usecase",
+      "path": "usecase/main_landing_gear_usecase.xl"
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "aircraft"
+    },
+    {
+      "name": "pilot"
+    },
+    {
+      "name": "maintainer"
+    },
+    {
+      "name": "landing_gear_designer"
+    },
+    {
+      "name": "certification_authority"
+    }
+  ],
+  "needs": [
+    {
+      "name": "safe_vertical_support_and_shock_absorption_need",
+      "id": "SN.1",
+      "stakeholder": "aircraft",
+      "text": "The main landing gear shall provide safe vertical support and shock absorption under specified vertical landing impact and drop-test conditions.",
+      "source": "Requirement req0"
+    },
+    {
+      "name": "impact_performance_verification_need",
+      "id": "SN.2",
+      "stakeholder": "certification_authority",
+      "text": "The main landing gear shall support verification of vertical shock acceleration, piston rod acceleration positive peak limit, compression stroke, bottoming prevention, and post-impact stability.",
+      "source": "Requirements req8-req13 and derived requirement req29"
+    },
+    {
+      "name": "shock_absorber_design_need",
+      "id": "SN.3",
+      "stakeholder": "landing_gear_designer",
+      "text": "The tire, wheel assembly, oleo-pneumatic shock strut, gas chamber, hydraulic damping path, seals, and structural load path shall provide the required buffering and load-transfer behavior.",
+      "source": "Requirements req14-req20"
+    },
+    {
+      "name": "environmental_robustness_need",
+      "id": "SN.4",
+      "stakeholder": "landing_gear_designer",
+      "text": "The main landing gear shall maintain required support and shock absorption capability under specified landing impact, runway contact, and repeated load-cycle conditions.",
+      "source": "Requirements req21-req24"
+    },
+    {
+      "name": "service_suitability_need",
+      "id": "SN.5",
+      "stakeholder": "maintainer",
+      "text": "The main landing gear shall support inspection, maintenance, wear-item servicing, and minimum safe capability under allowed degradation.",
+      "source": "Requirements req25-req28"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "req0",
+      "id": "MLG-REQ-000",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall provide safe vertical support and shock absorption for the aircraft under specified vertical landing impact and drop-test conditions.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req1",
+      "id": "MLG-REQ-001",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall satisfy the functional requirements for vertical load support, ground contact support, vertical load transfer, impact absorption, damping energy dissipation, and controlled rebound.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req2",
+      "id": "MLG-REQ-002",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall support the aircraft vertical load transmitted through the landing gear attachment structure during specified landing impact conditions.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req3",
+      "id": "MLG-REQ-003",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The wheel and tire assembly shall provide ground contact support when the main landing gear contacts the runway surface during vertical landing impact.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req4",
+      "id": "MLG-REQ-004",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall transfer vertical impact loads from the wheel and tire assembly through the shock strut and structural attachment path to the aircraft structure.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req5",
+      "id": "MLG-REQ-005",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall absorb vertical landing impact energy through controlled compression of its shock absorption assembly.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req6",
+      "id": "MLG-REQ-006",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall dissipate impact energy during compression and rebound to support a controlled vertical response.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req7",
+      "id": "MLG-REQ-007",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall provide controlled rebound after shock strut compression under specified vertical landing impact conditions.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req8",
+      "id": "MLG-REQ-008",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall satisfy the non-functional requirements for landing impact performance, physical design, operating environment adaptation, and service suitability.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req9",
+      "id": "MLG-REQ-009",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall satisfy the performance requirements for vertical shock acceleration, compression stroke, bottoming prevention, and post-impact stability.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req10",
+      "id": "MLG-REQ-010",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall limit the peak vertical shock acceleration transmitted to the supported aircraft structure within the specified limit.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req29",
+      "id": "MLG-REQ-010A",
+      "priority": null,
+      "type": "derived_quantitative_constraint",
+      "level": "DerivedReq",
+      "text": "The main landing gear shall limit the maximum positive peak of the piston rod vertical acceleration time history, max_t(piston_zdd_out(t)), to less than 20 m/s^2 during the drop process.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req11",
+      "id": "MLG-REQ-011",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The shock strut shall limit maximum compression stroke within the specified limit during vertical landing impact.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req12",
+      "id": "MLG-REQ-012",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The shock strut shall prevent hard bottoming under specified vertical landing impact conditions.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req13",
+      "id": "MLG-REQ-013",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall recover to a stable ground-support state after the vertical impact and rebound response.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req14",
+      "id": "MLG-REQ-014",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall satisfy the design requirements for tire vertical buffering, oleo-pneumatic shock absorption, gas elastic recovery, hydraulic damping, sealing integrity, and load-path integrity.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req15",
+      "id": "MLG-REQ-015",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The tire shall provide vertical stiffness characteristics within the allowed range needed to meet the specified landing impact buffering requirement.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req16",
+      "id": "MLG-REQ-016",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The oleo-pneumatic shock strut shall provide compression and extension characteristics needed to meet the specified impact absorption and rebound control requirements.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req17",
+      "id": "MLG-REQ-017",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The gas chamber of the shock strut shall provide elastic restoring force during and after shock strut compression.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req18",
+      "id": "MLG-REQ-018",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The hydraulic damping path of the shock strut shall provide damping characteristics within the allowed range needed for impact energy dissipation and rebound control.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req19",
+      "id": "MLG-REQ-019",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The shock strut shall maintain oil and gas sealing integrity required for oleo-pneumatic load support, energy absorption, and elastic recovery.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req20",
+      "id": "MLG-REQ-020",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear connection structure shall maintain the integrity and alignment of the vertical load path from tire contact through the shock strut to the aircraft attachment structure.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req21",
+      "id": "MLG-REQ-021",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall satisfy the environmental requirements for specified landing impact, runway contact, and repeated load-cycle conditions.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req22",
+      "id": "MLG-REQ-022",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall maintain the required vertical support and shock absorption capability when subjected to the specified vertical landing impact environment.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req23",
+      "id": "MLG-REQ-023",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The wheel and tire assembly shall maintain stable contact support with the runway surface under the specified runway contact condition.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req24",
+      "id": "MLG-REQ-024",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear structural members, tire, wheel assembly, and shock strut shall withstand the specified repeated vertical load-cycle conditions without loss of required vertical support and shock absorption capability.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req25",
+      "id": "MLG-REQ-025",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall satisfy the suitability requirements for inspection, maintenance, wear-item replacement, and minimum safe capability under allowed performance degradation.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req26",
+      "id": "MLG-REQ-026",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall allow inspection and maintenance of the tire, wheel assembly, shock strut, hydraulic fluid path, gas chamber, seals, and primary structural joints.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req27",
+      "id": "MLG-REQ-027",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "The main landing gear shall support replacement or servicing of wear-sensitive items associated with tire contact, oleo sealing, and hydraulic damping performance.",
+      "responsible_stakeholder": null,
+      "role": null
+    },
+    {
+      "name": "req28",
+      "id": "MLG-REQ-028",
+      "priority": null,
+      "type": null,
+      "level": "SystemReq",
+      "text": "When key buffering components experience performance deviation, wear, or degradation within the allowed range, the main landing gear shall retain the specified minimum safe landing support and buffering capability.",
+      "responsible_stakeholder": null,
+      "role": null
+    }
+  ],
+  "traceability": {
+    "derive": [
+      {
+        "source": "aircraft",
+        "target": "req0"
+      },
+      {
+        "source": "pilot",
+        "target": "req0"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req0"
+      },
+      {
+        "source": "certification_authority",
+        "target": "req0"
+      },
+      {
+        "source": "maintainer",
+        "target": "req25"
+      },
+      {
+        "source": "aircraft",
+        "target": "req2"
+      },
+      {
+        "source": "aircraft",
+        "target": "req4"
+      },
+      {
+        "source": "aircraft",
+        "target": "req10"
+      },
+      {
+        "source": "aircraft",
+        "target": "req29"
+      },
+      {
+        "source": "pilot",
+        "target": "req7"
+      },
+      {
+        "source": "pilot",
+        "target": "req13"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req1"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req3"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req5"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req6"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req9"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req29"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req14"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req15"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req16"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req17"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req18"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req19"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req20"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req21"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req22"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req23"
+      },
+      {
+        "source": "landing_gear_designer",
+        "target": "req24"
+      },
+      {
+        "source": "certification_authority",
+        "target": "req10"
+      },
+      {
+        "source": "certification_authority",
+        "target": "req29"
+      },
+      {
+        "source": "certification_authority",
+        "target": "req11"
+      },
+      {
+        "source": "certification_authority",
+        "target": "req12"
+      },
+      {
+        "source": "certification_authority",
+        "target": "req28"
+      },
+      {
+        "source": "maintainer",
+        "target": "req26"
+      },
+      {
+        "source": "maintainer",
+        "target": "req27"
+      },
+      {
+        "source": "maintainer",
+        "target": "req28"
+      }
+    ],
+    "compose": [
+      {
+        "source": "req1",
+        "target": "req0"
+      },
+      {
+        "source": "req2",
+        "target": "req1"
+      },
+      {
+        "source": "req3",
+        "target": "req1"
+      },
+      {
+        "source": "req4",
+        "target": "req1"
+      },
+      {
+        "source": "req5",
+        "target": "req1"
+      },
+      {
+        "source": "req6",
+        "target": "req1"
+      },
+      {
+        "source": "req7",
+        "target": "req1"
+      },
+      {
+        "source": "req8",
+        "target": "req0"
+      },
+      {
+        "source": "req9",
+        "target": "req8"
+      },
+      {
+        "source": "req10",
+        "target": "req9"
+      },
+      {
+        "source": "req29",
+        "target": "req10"
+      },
+      {
+        "source": "req11",
+        "target": "req9"
+      },
+      {
+        "source": "req12",
+        "target": "req9"
+      },
+      {
+        "source": "req13",
+        "target": "req9"
+      },
+      {
+        "source": "req14",
+        "target": "req8"
+      },
+      {
+        "source": "req15",
+        "target": "req14"
+      },
+      {
+        "source": "req16",
+        "target": "req14"
+      },
+      {
+        "source": "req17",
+        "target": "req14"
+      },
+      {
+        "source": "req18",
+        "target": "req14"
+      },
+      {
+        "source": "req19",
+        "target": "req14"
+      },
+      {
+        "source": "req20",
+        "target": "req14"
+      },
+      {
+        "source": "req21",
+        "target": "req8"
+      },
+      {
+        "source": "req22",
+        "target": "req21"
+      },
+      {
+        "source": "req23",
+        "target": "req21"
+      },
+      {
+        "source": "req24",
+        "target": "req21"
+      },
+      {
+        "source": "req25",
+        "target": "req8"
+      },
+      {
+        "source": "req26",
+        "target": "req25"
+      },
+      {
+        "source": "req27",
+        "target": "req25"
+      },
+      {
+        "source": "req28",
+        "target": "req25"
+      }
+    ]
+  }
+}

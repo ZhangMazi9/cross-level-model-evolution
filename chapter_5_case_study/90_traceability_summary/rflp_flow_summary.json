@@ -1,0 +1,36 @@
+{
+  "time": "2026-07-19T12:05:23",
+  "case_name": "MainLandingGearDropTest",
+  "summary_scope": "Public traceability package with seven intermediate checkpoint stages, representative validation traces, final-model links, and engineering-refinement statistics.",
+  "flow": [
+    "Requirement, use-case, functional-analysis, and subsystem-analysis artifacts prepared",
+    "Logical architecture and logical behavior artifacts prepared",
+    "Logical XLanguage model validation completed",
+    "Physical context, logic-physics mapping, physical architecture, and physical behavior artifacts prepared",
+    "Physical XLanguage model validation completed",
+    "Final RFLP model set released in the public case-study package"
+  ],
+  "public_outputs": {
+    "requirement_model": "../01_rflp_final_models/requirement_model",
+    "usecase_model": "../01_rflp_final_models/usecase_model",
+    "logical_model": "../01_rflp_final_models/logical_model",
+    "physical_model": "../01_rflp_final_models/physical_model",
+    "engineering_refinement_outputs": "../02_engineering_refinement_for_engineers",
+    "optimization_modeling_results": "../03_optimization_modeling_results"
+  },
+  "checkpoint_evidence": {
+    "index": "CHECKPOINT_INDEX.md",
+    "requirements": "checkpoints/01_requirements",
+    "functional_analysis": "checkpoints/02_functional_analysis",
+    "use_case": "checkpoints/03_use_case",
+    "logical_architecture": "checkpoints/04_logical_architecture",
+    "logic_physics_transition": "checkpoints/05_logic_physics_transition",
+    "physical_model": "checkpoints/06_physical_model",
+    "validation": "checkpoints/07_validation"
+  },
+  "validation_status": {
+    "logical_model": "pass",
+    "physical_model": "pass",
+    "final_package_self_check": "pass"
+  }
+}

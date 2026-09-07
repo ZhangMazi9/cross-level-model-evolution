@@ -1,0 +1,174 @@
+{
+  "status": "pass",
+  "generation_trace": {
+    "optimization_ir_generation": "llm:qwen3.7-plus"
+  },
+  "physical_candidates": {
+    "package_name": "LandingGearReduced",
+    "couple_name": "LandingGearSystem",
+    "classes": {
+      "MainGearTireWheelAssembly": {
+        "parameters": [
+          "tire_stiffness"
+        ],
+        "values": [],
+        "outputs": [
+          "tire_force",
+          "tire_deflection"
+        ],
+        "inputs": []
+      },
+      "HydraulicDampingChannel": {
+        "parameters": [
+          "linear_damping_coeff",
+          "quadratic_damping_gain"
+        ],
+        "values": [],
+        "outputs": [
+          "damping_force"
+        ],
+        "inputs": [
+          "oleo_compression_speed"
+        ]
+      },
+      "EquivalentAirframeWheelMassAssembly": {
+        "parameters": [
+          "wheel_mass",
+          "sprung_mass"
+        ],
+        "values": [
+          "y_s",
+          "y_u",
+          "a_s",
+          "a_u"
+        ],
+        "outputs": [
+          "a_s_out",
+          "a_u_out"
+        ],
+        "inputs": [
+          "tire_force",
+          "oleo_force"
+        ]
+      },
+      "OleoPistonRod": {
+        "parameters": [],
+        "values": [],
+        "outputs": [
+          "piston_zdd_out"
+        ],
+        "inputs": []
+      },
+      "LandingGearAccelerationMetrics": {
+        "parameters": [],
+        "values": [],
+        "outputs": [
+          "max_positive_acceleration",
+          "max_negative_acceleration_peak"
+        ],
+        "inputs": []
+      }
+    },
+    "bindings": [
+      "EquivalentAirframeWheelMassAssembly.a_s",
+      "EquivalentAirframeWheelMassAssembly.a_s_out",
+      "EquivalentAirframeWheelMassAssembly.a_u",
+      "EquivalentAirframeWheelMassAssembly.a_u_out",
+      "EquivalentAirframeWheelMassAssembly.oleo_force",
+      "EquivalentAirframeWheelMassAssembly.sprung_mass",
+      "EquivalentAirframeWheelMassAssembly.tire_force",
+      "EquivalentAirframeWheelMassAssembly.wheel_mass",
+      "EquivalentAirframeWheelMassAssembly.y_s",
+      "EquivalentAirframeWheelMassAssembly.y_u",
+      "HydraulicDampingChannel.damping_force",
+      "HydraulicDampingChannel.linear_damping_coeff",
+      "HydraulicDampingChannel.oleo_compression_speed",
+      "HydraulicDampingChannel.quadratic_damping_gain",
+      "LandingGearAccelerationMetrics.max_negative_acceleration_peak",
+      "LandingGearAccelerationMetrics.max_positive_acceleration",
+      "MainGearTireWheelAssembly.tire_deflection",
+      "MainGearTireWheelAssembly.tire_force",
+      "MainGearTireWheelAssembly.tire_stiffness",
+      "OleoPistonRod.piston_zdd_out"
+    ]
+  },
+  "ir_validation_errors": [],
+  "engineering_semantic_report": {
+    "status": "pass",
+    "issues": [],
+    "summary": {
+      "design_variable_count": 4,
+      "constraint_count": 1,
+      "objective_count": 2
+    }
+  },
+  "mdo_syntax_report": {
+    "status": "pass",
+    "mdo_name": "LandingGearDropOptimization",
+    "optimizer": "UniXDE",
+    "algorithm": "NSGA2",
+    "design_variables": [
+      {
+        "kind": "continuous",
+        "binding": "EquivalentAirframeWheelMassAssembly.wheel_mass",
+        "line": 12,
+        "initial_value": 300.0,
+        "upper_bound": 430.0,
+        "lower_bound": 240.0
+      },
+      {
+        "kind": "continuous",
+        "binding": "MainGearTireWheelAssembly.tire_stiffness",
+        "line": 21,
+        "initial_value": 1700000.0,
+        "upper_bound": 2000000.0,
+        "lower_bound": 1300000.0
+      },
+      {
+        "kind": "continuous",
+        "binding": "HydraulicDampingChannel.linear_damping_coeff",
+        "line": 30,
+        "initial_value": 153475.1727204978,
+        "upper_bound": 204633.5636273304,
+        "lower_bound": 102316.7818136652
+      },
+      {
+        "kind": "continuous",
+        "binding": "HydraulicDampingChannel.quadratic_damping_gain",
+        "line": 39,
+        "initial_value": 1.9602485837391784,
+        "upper_bound": 31.363977339826853,
+        "lower_bound": 0.9801242918695892
+      }
+    ],
+    "constraints": [
+      {
+        "kind": "inequality",
+        "binding": "LandingGearAccelerationMetrics.max_positive_acceleration",
+        "line": 48,
+        "upper_bound": 20.0,
+        "lower_bound": null
+      }
+    ],
+    "objectives": [
+      {
+        "binding": "LandingGearAccelerationMetrics.max_positive_acceleration",
+        "direction": "minimize",
+        "line": 57
+      },
+      {
+        "binding": "LandingGearAccelerationMetrics.max_negative_acceleration_peak",
+        "direction": "minimize",
+        "line": 66
+      }
+    ],
+    "issues": []
+  },
+  "mdo_text_validation_errors": [],
+  "outputs": {
+    "optimization_model": "03_optimization_modeling_results/optimization_model.json",
+    "mdo_xlanguage": "03_optimization_modeling_results/LandingGearDropOptimization.xl",
+    "user_summary_json": "03_optimization_modeling_results/user_summary.json",
+    "user_summary_markdown": "03_optimization_modeling_results/user_summary.md"
+  }
+}

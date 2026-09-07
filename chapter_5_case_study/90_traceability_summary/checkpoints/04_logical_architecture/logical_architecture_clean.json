@@ -1,0 +1,1066 @@
+{
+  "name": "MainLandingGearDropTest",
+  "subsystems": [
+    {
+      "name": "ScenarioTimelineSource",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "output",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "output",
+          "data_type": "bool"
+        }
+      ],
+      "states": [
+        {
+          "name": "BeforeSchedule",
+          "is_initial": true,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": null,
+              "target_state": "EvtDescentStart",
+              "outputs": [
+                {
+                  "port": "LOGIC_EVT_DESCENT_START",
+                  "value": true
+                },
+                {
+                  "port": "LOGIC_EVT_DESCENT_START",
+                  "value": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "EvtDescentStart",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": null,
+              "target_state": "EvtTouchdown",
+              "outputs": [
+                {
+                  "port": "LOGIC_EVT_DESCENT_START",
+                  "value": false
+                },
+                {
+                  "port": "LOGIC_EVT_TOUCHDOWN",
+                  "value": true
+                },
+                {
+                  "port": "LOGIC_EVT_TOUCHDOWN",
+                  "value": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "EvtTouchdown",
+          "is_initial": false,
+          "entry_hold_time": 1.0,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": null,
+              "target_state": "EvtTouchdown",
+              "outputs": [
+                {
+                  "port": "LOGIC_EVT_TOUCHDOWN",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DropTestScenarioTimeline",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "descent_scenario_active",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "touchdown_scenario_active",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "PreScenario",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "DescentScenarioActive",
+              "outputs": [
+                {
+                  "port": "descent_scenario_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DescentScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "TouchdownScenarioActiveEntry",
+              "outputs": [
+                {
+                  "port": "touchdown_scenario_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActiveEntry",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "touchdown_scenario_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "touchdown_scenario_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReleaseFixtureLogic",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "release_fixture_inactive",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "release_fixture_released",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "HoldingAircraft",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "Released",
+              "outputs": [
+                {
+                  "port": "release_fixture_released",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Released",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "InactiveAfterRelease",
+              "outputs": [
+                {
+                  "port": "release_fixture_inactive",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "InactiveAfterRelease",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "release_fixture_inactive",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "release_fixture_inactive",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AirframeEquivalentMassLogic",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "airframe_descent_active",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "impact_load_transfer_active",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "SupportedInitialCondition",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "ReleasedDescent",
+              "outputs": [
+                {
+                  "port": "airframe_descent_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ReleasedDescent",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "ImpactLoadTransfer",
+              "outputs": [
+                {
+                  "port": "impact_load_transfer_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ImpactLoadTransfer",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "impact_load_transfer_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "impact_load_transfer_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TireWheelAssemblyLogic",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "clearance_tracking_active",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "tire_contact_established",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "AirborneNoContact",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "ClearanceTracking",
+              "outputs": [
+                {
+                  "port": "clearance_tracking_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ClearanceTracking",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "ContactEstablished",
+              "outputs": [
+                {
+                  "port": "tire_contact_established",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ContactEstablished",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "tire_contact_established",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "tire_contact_established",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GroundContactBoundaryLogic",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "clearance_boundary_monitoring",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "contact_constraint_active",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "GroundReferenceDefined",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "ClearanceBoundaryMonitoring",
+              "outputs": [
+                {
+                  "port": "clearance_boundary_monitoring",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ClearanceBoundaryMonitoring",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "ContactConstraintActive",
+              "outputs": [
+                {
+                  "port": "contact_constraint_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ContactConstraintActive",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "contact_constraint_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "contact_constraint_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OleoPneumaticStrutLogic",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "compression_stroke_active",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "stroke_available",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "ExtendedStroke",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "StrokeAvailable",
+              "outputs": [
+                {
+                  "port": "stroke_available",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "StrokeAvailable",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "CompressionStroke",
+              "outputs": [
+                {
+                  "port": "compression_stroke_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CompressionStroke",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "compression_stroke_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "compression_stroke_active",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HydraulicDampingLogic",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "damping_activated",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "relative_motion_monitoring",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "DampingStandby",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "RelativeMotionMonitoring",
+              "outputs": [
+                {
+                  "port": "relative_motion_monitoring",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RelativeMotionMonitoring",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "DampingActivated",
+              "outputs": [
+                {
+                  "port": "damping_activated",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DampingActivated",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "damping_activated",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "damping_activated",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AccelerationObservationLogic",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "baseline_acceleration_recording",
+          "direction": "output",
+          "data_type": "real"
+        },
+        {
+          "name": "impact_acceleration_monitoring",
+          "direction": "output",
+          "data_type": "real"
+        }
+      ],
+      "states": [
+        {
+          "name": "ObservationIdle",
+          "is_initial": true,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_DESCENT_START",
+              "condition": "true",
+              "target_state": "BaselineAccelerationRecording",
+              "outputs": [
+                {
+                  "port": "baseline_acceleration_recording",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BaselineAccelerationRecording",
+          "is_initial": false,
+          "entry_hold_time": null,
+          "transitions": [
+            {
+              "trigger_type": "receive",
+              "trigger_value": "LOGIC_EVT_TOUCHDOWN",
+              "condition": "true",
+              "target_state": "ImpactAccelerationMonitoring",
+              "outputs": [
+                {
+                  "port": "impact_acceleration_monitoring",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ImpactAccelerationMonitoring",
+          "is_initial": false,
+          "entry_hold_time": 0.1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "impact_acceleration_monitoring",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TouchdownScenarioActive",
+          "is_initial": false,
+          "entry_hold_time": 1,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": "true",
+              "target_state": "TouchdownScenarioActive",
+              "outputs": [
+                {
+                  "port": "impact_acceleration_monitoring",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ScenarioEventMarkerRecorder",
+      "parameters": [],
+      "ports": [
+        {
+          "name": "LOGIC_EVT_DESCENT_START",
+          "direction": "input",
+          "data_type": "bool"
+        },
+        {
+          "name": "LOGIC_EVT_TOUCHDOWN",
+          "direction": "input",
+          "data_type": "bool"
+        }
+      ],
+      "states": [
+        {
+          "name": "Monitoring",
+          "is_initial": true,
+          "entry_hold_time": 1.0,
+          "transitions": [
+            {
+              "trigger_type": "timeover",
+              "trigger_value": null,
+              "condition": null,
+              "target_state": "Monitoring",
+              "outputs": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "DropTestScenarioTimeline",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "DropTestScenarioTimeline",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "ReleaseFixtureLogic",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "ReleaseFixtureLogic",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "AirframeEquivalentMassLogic",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "AirframeEquivalentMassLogic",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "TireWheelAssemblyLogic",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "TireWheelAssemblyLogic",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "GroundContactBoundaryLogic",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "GroundContactBoundaryLogic",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "OleoPneumaticStrutLogic",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "OleoPneumaticStrutLogic",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "HydraulicDampingLogic",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "HydraulicDampingLogic",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "AccelerationObservationLogic",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "AccelerationObservationLogic",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_DESCENT_START",
+      "to_subsystem": "ScenarioEventMarkerRecorder",
+      "to_port": "LOGIC_EVT_DESCENT_START"
+    },
+    {
+      "from_subsystem": "ScenarioTimelineSource",
+      "from_port": "LOGIC_EVT_TOUCHDOWN",
+      "to_subsystem": "ScenarioEventMarkerRecorder",
+      "to_port": "LOGIC_EVT_TOUCHDOWN"
+    }
+  ]
+}

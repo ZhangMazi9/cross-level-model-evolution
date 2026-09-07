@@ -1,0 +1,105 @@
+{
+  "mdo_name": "LandingGearDropOptimization",
+  "optimizer": "UniXDE",
+  "algorithm": "NSGA2",
+  "model_binding": {
+    "top_model": "LandingGearSystem",
+    "simulation_class": "LandingGearReduced",
+    "physical_model_path": "../01_rflp_final_models/physical_model/LandingGearReduced.xl",
+    "constraint_policy": "requirement_constraint_from_MLG-REQ-010A; no_added_piston_stroke_or_bottoming_constraint"
+  },
+  "design_variables": [
+    {
+      "id": "DV-001",
+      "kind": "continuous",
+      "binding": "EquivalentAirframeWheelMassAssembly.wheel_mass",
+      "initial_value": 300.0,
+      "lower_bound": 240.0,
+      "upper_bound": 430.0,
+      "candidates": [],
+      "unit": "kg",
+      "source_ref": "EquivalentAirframeWheelMassAssembly.wheel_mass"
+    },
+    {
+      "id": "DV-002",
+      "kind": "continuous",
+      "binding": "MainGearTireWheelAssembly.tire_stiffness",
+      "initial_value": 1700000.0,
+      "lower_bound": 1300000.0,
+      "upper_bound": 2000000.0,
+      "candidates": [],
+      "unit": "N/m",
+      "source_ref": "CAE dimension2 equals MainGearTireWheelAssembly.tire_stiffness"
+    },
+    {
+      "id": "DV-003",
+      "kind": "continuous",
+      "binding": "HydraulicDampingChannel.linear_damping_coeff",
+      "initial_value": 153475.1727204978,
+      "lower_bound": 102316.7818136652,
+      "upper_bound": 204633.5636273304,
+      "candidates": [],
+      "unit": "N/(m/s)",
+      "source_ref": "HydraulicDampingChannel.linear_damping_coeff"
+    },
+    {
+      "id": "DV-004",
+      "kind": "continuous",
+      "binding": "HydraulicDampingChannel.quadratic_damping_gain",
+      "initial_value": 1.9602485837391784,
+      "lower_bound": 0.9801242918695892,
+      "upper_bound": 31.363977339826853,
+      "candidates": [],
+      "unit": "N/(m/s)^2",
+      "source_ref": "HydraulicDampingChannel.quadratic_damping_gain"
+    }
+  ],
+  "constraints": [
+    {
+      "id": "CON-001",
+      "kind": "inequality",
+      "binding": "LandingGearAccelerationMetrics.max_positive_acceleration",
+      "lower_bound": null,
+      "upper_bound": 20.0,
+      "target_value": null,
+      "tolerance": 1e-06,
+      "scale_factor": 1.0,
+      "weight_factor": 1.0,
+      "source_ref": "MLG-REQ-010A"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "OBJ-001",
+      "binding": "LandingGearAccelerationMetrics.max_positive_acceleration",
+      "direction": "minimize",
+      "definition": "max_t(OleoPistonRod.piston_zdd_out(t)) over the drop process",
+      "scale_factor": 1.0,
+      "weight_factor": 1.0,
+      "source_ref": "OleoPistonRod.piston_zdd_out"
+    },
+    {
+      "id": "OBJ-002",
+      "binding": "LandingGearAccelerationMetrics.max_negative_acceleration_peak",
+      "direction": "minimize",
+      "definition": "abs(min_t(OleoPistonRod.piston_zdd_out(t))) over the drop process",
+      "scale_factor": 1.0,
+      "weight_factor": 1.0,
+      "source_ref": "OleoPistonRod.piston_zdd_out"
+    }
+  ],
+  "execution_contract": {
+    "required_outputs": [
+      "OleoPistonRod.piston_zdd_out",
+      "LandingGearAccelerationMetrics.max_positive_acceleration",
+      "LandingGearAccelerationMetrics.max_negative_acceleration_peak"
+    ],
+    "postprocess": {
+      "input_csv_variable": "pistonRod_piston_zdd_out",
+      "metrics": {
+        "max_positive_acceleration": "max(value)",
+        "max_negative_acceleration_peak": "abs(min(value))"
+      }
+    }
+  }
+}
